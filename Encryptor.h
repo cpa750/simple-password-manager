@@ -6,14 +6,14 @@
 
 using std::string;
 
-class encryptor
+class Encryptor
 {
 private:
-    char key[];
+    char key[128];
 
 public:
-    encryptor();
-    ~encryptor();
+    Encryptor();
+    ~Encryptor();
 
     virtual string encrypt() = 0;
     virtual string decrypt() = 0;
