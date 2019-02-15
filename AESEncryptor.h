@@ -7,19 +7,19 @@
 class AESEncryptor : public Encryptor
 {
 private:
-    static const int stateSize {128};
-    static const  int CKSize {128};
-    unsigned char State[stateSize];
-    unsigned char cipherKey[128];
-    unsigned char expandedKey;
+    static const int numRows {32};
+    static const int Nb {4};
+    static const int Nk {4};
+    unsigned char state[numRows][Nb];
+    unsigned char cipherKey[numRows][Nk];
 
     // Helper function used by the cipher
     unsigned char expandKey(unsigned char cipherKey, const int CKSize);
 
 public:
     // Functions used in the Rijndael cipher
-    void byteSub(unsigned char state[256]);
-    void shiftRow(unsigned char state[256]);
+    void byteSub(unsigned char state[numRows][Nb]);
+    void shiftRow(unsigned char state[numRows][Nb]);
     void mixColumn(unsigned char state[256]);
     void addRoundKey(unsigned char state[256]);
     /*
