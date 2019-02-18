@@ -18,10 +18,10 @@ private:
 
 public:
     // Functions used in the Rijndael cipher
-    void byteSub(unsigned char state[numRows][Nb]);
-    void shiftRow(unsigned char state[numRows][Nb]);
-    void mixColumn(unsigned char state[256]);
-    void addRoundKey(unsigned char state[256]);
+    void byteSub(unsigned char* state[numRows][Nb]);
+    void shiftRow(unsigned char* state[numRows][Nb]);
+    void mixColumn(unsigned char* state[numRows][Nb]);
+    void addRoundKey(unsigned char* state[numRows][Nb]);
     /*
      * TODO: figure out how to implement the round key
      * as derived from the cipher key

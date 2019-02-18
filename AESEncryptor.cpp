@@ -1,17 +1,17 @@
 #include "AESEncryptor.h"
 
-void AESEncryptor::byteSub(unsigned char state[AESEncryptor::numRows][AESEncryptor::Nb])
+void AESEncryptor::byteSub(unsigned char* state[AESEncryptor::numRows][AESEncryptor::Nb])
 {
     for (int i {0}; i < AESEncryptor::numRows; ++i)
     {
         for (int j {0}; j < AESEncryptor::Nb; ++j)
         {
-            state[i][j] = SBox::LUT[state[i][j]];
+            *state[i][j] = SBox::LUT[*state[i][j]];
         }
     }
 }
 
-void AESEncryptor::shiftRow(unsigned char state[AESEncryptor::numRows][AESEncryptor::Nb])
+void AESEncryptor::shiftRow(unsigned char* state[AESEncryptor::numRows][AESEncryptor::Nb])
 {
     for (int i {0}; i < AESEncryptor::numRows; ++i)
     {
@@ -22,16 +22,17 @@ void AESEncryptor::shiftRow(unsigned char state[AESEncryptor::numRows][AESEncryp
             for (int j {0}; j < AESEncryptor::Nb; ++j)
             {
                 int newPos = (j - i) % AESEncryptor::Nb;
-                row[newPos] = state[i][j];
+                row[newPos] = *state[i][j];
                 /*
                  * This algorithm shifts the elements
                  * in each row of the state according to the AES
                  * standard, placing them in the temp array row.
                  */
             }
+
             for (int k {0}; k < AESEncryptor::Nb; ++k)
             {
-                state[i][k] = row[k];
+                *state[i][k] = row[k];
                 /*
                  * This temp array is then assigned back to the
                  * state.
@@ -39,4 +40,14 @@ void AESEncryptor::shiftRow(unsigned char state[AESEncryptor::numRows][AESEncryp
             }
         }
     }
+}
+
+void AESEncryptor::mixColumn(unsigned char* state[AESEncryptor::numRows][AESEncryptor::Nb])
+{
+    // TODO: Implement this
+}
+
+void AESEncryptor::addRoundKey(unsigned char* state[AESEncryptor::numRows][AESEncryptor::Nb])
+{
+    //TODO: Implement this
 }
