@@ -15,17 +15,28 @@ void AESEncryptor::shiftRow(unsigned char state[AESEncryptor::numRows][AESEncryp
 {
     for (int i {0}; i < AESEncryptor::numRows; ++i)
     {
-        if (i == 0) continue; // prevent modulo by 0, also skipping first row according to AES
+        if (i == 0) continue; // Skip shifting the first row according to the AES standard.
         else
         {
-            unsigned char temp;
+            unsigned char row[AESEncryptor::Nb];
             for (int j {0}; j < AESEncryptor::Nb; ++j)
             {
                 int newPos = (j - i) % AESEncryptor::Nb;
-                temp = state[i][newPos];
-                state[i][newPos] = state[i][j];
+                row[newPos] = state[i][j];
+                /*
+                 * This algorithm shifts the elements
+                 * in each row of the state according to the AES
+                 * standard, placing them in the temp array row.
+                 */
+            }
+            for (int k {0}; k < AESEncryptor::Nb; ++k)
+            {
+                state[i][k] = row[k];
+                /*
+                 * This temp array is then assigned back to the
+                 * state.
+                 */
             }
         }
     }
-    // TODO: Finish the implementation of this algorithm
 }
