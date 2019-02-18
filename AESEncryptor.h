@@ -29,5 +29,4 @@ public:
 
 };
 
-
 #endif //SIMPLE_PASSWORD_MANAGER_AESENCRYPTOR_H

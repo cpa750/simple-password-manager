@@ -1,4 +1,6 @@
 #include "AESEncryptor.h"
+    
+// TODO: replace C-style arrays with std::array/vector
 
 void AESEncryptor::byteSub(unsigned char* state[AESEncryptor::numRows][AESEncryptor::Nb])
 {
@@ -7,6 +9,10 @@ void AESEncryptor::byteSub(unsigned char* state[AESEncryptor::numRows][AESEncryp
         for (int j {0}; j < AESEncryptor::Nb; ++j)
         {
             *state[i][j] = SBox::LUT[*state[i][j]];
+            /*
+             * Implementation of the lookup table
+             * for the s-box
+             */
         }
     }
 }
