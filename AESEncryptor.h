@@ -4,6 +4,8 @@
 #include "Encryptor.h"
 #include "SBox.cpp"
 
+#include "GaloisFieldElement.h"
+
 class AESEncryptor : public Encryptor
 {
 private:

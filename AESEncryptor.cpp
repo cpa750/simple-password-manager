@@ -1,5 +1,5 @@
 #include "AESEncryptor.h"
-    
+
 // TODO: replace C-style arrays with std::array/vector
 
 void AESEncryptor::byteSub(unsigned char* state[AESEncryptor::numRows][AESEncryptor::Nb])
