@@ -2,6 +2,7 @@
 #define SIMPLE_PASSWORD_MANAGER_AESENCRYPTOR_H
 
 #include <string>
+#include <vector>
 
 #include "Encryptor.h"
 #include "SBox.cpp"
@@ -19,11 +20,6 @@ private:
     static const int Nr {10};
     unsigned char state[numRows][Nb];
     unsigned char cipherKey[numRows][Nk];
-
-    std::string getBinaryRepr(unsigned int num);
-
-    // Helper function used by the cipher
-    unsigned char expandKey(unsigned char cipherKey, const int CKSize);
 
 public:
     // Functions used in the Rijndael cipher

@@ -54,29 +54,60 @@ void AESEncryptor::mixColumns(unsigned char* state[AESEncryptor::numRows][AESEnc
     const unsigned int pow {8};
     unsigned int primePoly[9] = {1, 0, 0, 0, 1, 1, 0, 1, 1};
     galois::GaloisField gf(pow, primePoly);
+    // Constructing the Galois field
+
+    galois::GaloisFieldElement cxElems[4] = {
+            galois::GaloisFieldElement(&gf, 0x03),
+            galois::GaloisFieldElement(&gf, 0x01),
+            galois::GaloisFieldElement(&gf, 0x01),
+            galois::GaloisFieldElement(&gf, 0x02)
+    };
+    galois::GaloisFieldPolynomial cxPoly(&gf, 3, cxElems);
+    // Constructing c(x) as defined by AES
+
     /*
      * Constructing a Galois field in 2^8 space
      * using the x^8+x^4+x^3+x+1 irreducible polynomial
      * as specified by AES
      */
+    unsigned char column[AESEncryptor::numRows];
 
-    galois::GaloisFieldElement elements[32];
-    int elementIndex {31};
-    unsigned char character;
-    // TODO: Replace this placeholder with a value from the state
-
-    for (unsigned int i = 1 << 31; i > 0; i = i / 2)
+    // Mix all of the columns in the state one at a time
+    for (int i {0}; i < AESEncryptor::Nb; ++i)
     {
-        elements[elementIndex] = galois::GaloisFieldElement(&gf, (character & i));
-        /*
-         * This code gets the single binary digit at the index where i=1,
-         * by &ing i with a character.
-         */
-        --elementIndex;
-    }
-    // Have to do galois arithmetic over the column
+        for (int j{0}; j < AESEncryptor::numRows; ++j)
+        {
+            column[j] = *state[j][i];
+            // Getting the column vector from the state
+        }
 
-    // TODO: Finish implementing this
+        galois::GaloisFieldElement elements[AESEncryptor::numRows];
+
+        for (int k {0}; k < AESEncryptor::numRows; ++k)
+        {
+            galois::GaloisFieldElement gfe(&gf, column[k]);
+            elements[k] = gfe;
+            // Creating the elements array which will be used to create the polynomial
+        }
+
+        galois::GaloisFieldPolynomial gfp(&gf, AESEncryptor::numRows-1, elements);
+        // Constructing galois polynomial from a state column
+
+        galois::GaloisFieldPolynomial res = gfp * cxPoly;
+        // Multiplying the two GF polynomials according to AES
+
+        std::vector<galois::GaloisFieldElement> resCoeffs = res.getPolyElems();
+        // Getting the resultant elements from the multiplication
+
+        for (int l {0}; l > AESEncryptor::numRows; ++l)
+        {
+            *state[l][i] = resCoeffs.at(l).getPolyCoeff();
+            /*
+             * Getting the resultant coefficients (chars) and
+             * reassigning them to the state column
+             */
+        }
+    }
 }
 
 void AESEncryptor::addRoundKey(unsigned char* state[AESEncryptor::numRows][AESEncryptor::Nb])
