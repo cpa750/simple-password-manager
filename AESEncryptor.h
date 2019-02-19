@@ -1,10 +1,14 @@
 #ifndef SIMPLE_PASSWORD_MANAGER_AESENCRYPTOR_H
 #define SIMPLE_PASSWORD_MANAGER_AESENCRYPTOR_H
 
+#include <string>
+
 #include "Encryptor.h"
 #include "SBox.cpp"
 
+#include "GaloisField.h"
 #include "GaloisFieldElement.h"
+#include "GaloisFieldPolynomial.h"
 
 class AESEncryptor : public Encryptor
 {
@@ -12,8 +16,11 @@ private:
     static const int numRows {32};
     static const int Nb {4};
     static const int Nk {4};
+    static const int Nr {10};
     unsigned char state[numRows][Nb];
     unsigned char cipherKey[numRows][Nk];
+
+    std::string getBinaryRepr(unsigned int num);
 
     // Helper function used by the cipher
     unsigned char expandKey(unsigned char cipherKey, const int CKSize);
@@ -22,7 +29,7 @@ public:
     // Functions used in the Rijndael cipher
     void byteSub(unsigned char* state[numRows][Nb]);
     void shiftRow(unsigned char* state[numRows][Nb]);
-    void mixColumn(unsigned char* state[numRows][Nb]);
+    void mixColumns(unsigned char* state[numRows][Nb]);
     void addRoundKey(unsigned char* state[numRows][Nb]);
     /*
      * TODO: figure out how to implement the round key
