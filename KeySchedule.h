@@ -19,7 +19,7 @@ protected:
     void scheduleCore(unsigned char* in, unsigned char i);
 
 public:
-    virtual std::string expandKey() = 0;
+    virtual void expandKey(unsigned char* in) = 0;
 
 };
 

@@ -42,7 +42,7 @@ void KeySchedule::scheduleCore(unsigned char *in, unsigned char i)
     rotate(in);
     /* Apply Rijndael's s-box on all 4 bytes */
     for(a = 0; a < 4; a++)
-        in[a] = SBox::LUT[a];
+        in[a] = SBox::LUT[in[a]];
     /* On just the first byte, add 2^i to the byte */
     in[0] ^= rcon(i);
 }

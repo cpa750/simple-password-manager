@@ -4,14 +4,14 @@
 #include <string>
 #include <vector>
 
-#include "Encryptor.h"
 #include "SBox.h"
 
 #include "GaloisField.h"
 #include "GaloisFieldElement.h"
 #include "GaloisFieldPolynomial.h"
 
-class AESEncryptor : public Encryptor
+// TODO: Make this a base class which encryptor classes using different bit-counts inherit from
+class AESEncryptor
 {
 private:
     static const int numRows {32};
