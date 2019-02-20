@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "Encryptor.h"
-#include "SBox.cpp"
+#include "SBox.h"
 
 #include "GaloisField.h"
 #include "GaloisFieldElement.h"
