@@ -8,7 +8,7 @@
 class KeySchedule128 : public KeySchedule
 {
 public:
-    void expandKey(unsigned char* in) final;
+    void expandKey(unsigned char* key) final;
 };
 
 

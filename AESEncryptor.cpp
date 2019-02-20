@@ -13,7 +13,6 @@ void AESEncryptor::byteSub(unsigned char* state[AESEncryptor::numRows][AESEncryp
              * Implementation of the lookup table
              * for the s-box
              */
-            // TODO: Rewrite this method using Galois Field arithmetic using the GFA library
         }
     }
 }
@@ -66,20 +65,15 @@ void AESEncryptor::mixColumns(unsigned char* state[AESEncryptor::numRows][AESEnc
     galois::GaloisFieldPolynomial cxPoly(&gf, 3, cxElems);
     // Constructing c(x) as defined by AES
 
-    /*
-     * Constructing a Galois field in 2^8 space
-     * using the x^8+x^4+x^3+x+1 irreducible polynomial
-     * as specified by AES
-     */
     unsigned char column[AESEncryptor::numRows];
 
     // Mix all of the columns in the state one at a time
     for (int i {0}; i < AESEncryptor::Nb; ++i)
     {
+        // Getting the column vector from the state
         for (int j{0}; j < AESEncryptor::numRows; ++j)
         {
             column[j] = *state[j][i];
-            // Getting the column vector from the state
         }
 
         galois::GaloisFieldElement elements[AESEncryptor::numRows];

@@ -10,7 +10,6 @@
 #include "GaloisFieldElement.h"
 #include "GaloisFieldPolynomial.h"
 
-// TODO: Make this a base class which encryptor classes using different bit-counts inherit from
 class AESEncryptor
 {
 private:
@@ -21,16 +20,18 @@ private:
     unsigned char state[numRows][Nb];
     unsigned char cipherKey[numRows][Nk];
 
-public:
     // Functions used in the Rijndael cipher
     void byteSub(unsigned char* state[numRows][Nb]);
     void shiftRow(unsigned char* state[numRows][Nb]);
     void mixColumns(unsigned char* state[numRows][Nb]);
     void addRoundKey(unsigned char* state[numRows][Nb]);
-    /*
-     * TODO: figure out how to implement the round key
-     * as derived from the cipher key
-     */
+
+    void round(unsigned char* state[numRows][Nb]);
+    void finalRound(unsigned char* state[numRows][Nb]);
+    // TODO: Implemment these
+
+public:
+    // Put the cipher method here when the time comes
 
 };
 

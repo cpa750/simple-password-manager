@@ -2,6 +2,11 @@
 
 using std::array;
 
+/*
+ * These are the Rijndael S-Box and inverse S-Box lookup tables according to:
+ * https://en.wikipedia.org/wiki/Rijndael_S-box
+ */
+
 namespace SBox
 {
     const array<unsigned char, 256> LUT =

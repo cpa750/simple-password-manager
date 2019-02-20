@@ -1,6 +1,13 @@
 #include "KeySchedule128.h"
 
-void KeySchedule128::expandKey(unsigned char* in)
+/*
+ * The functions defined here are not my own.
+ * They can be found at https://www.samiam.org/key-schedule.html
+ * Only small changes have been made to improve readability and
+ * adherence to conventions.
+ */
+
+void KeySchedule128::expandKey(unsigned char* key)
 {
     unsigned char t[4];
     /* c is 16 because the first sub-key is the user-supplied key */
@@ -13,7 +20,7 @@ void KeySchedule128::expandKey(unsigned char* in)
         /* Copy the temporary variable over from the last 4-byte
          * block */
         for(a = 0; a < 4; a++)
-            t[a] = in[a + c - 4];
+            t[a] = key[a + c - 4];
         /* Every four blocks (of four bytes),
          * do a complex calculation */
         if(c % 16 == 0) {
@@ -21,7 +28,7 @@ void KeySchedule128::expandKey(unsigned char* in)
             i++;
         }
         for(a = 0; a < 4; a++) {
-            in[c] = in[c - 16] ^ t[a];
+            key[c] = key[c - 16] ^ t[a];
             c++;
         }
     }
