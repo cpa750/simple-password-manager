@@ -51,6 +51,7 @@ void AESEncryptor::shiftRow(unsigned char* state[AESEncryptor::numRows][AESEncry
 
 void AESEncryptor::mixColumns(unsigned char* state[AESEncryptor::numRows][AESEncryptor::Nb])
 {
+    // TODO: This function needs some cleaning up and optimization
     const unsigned int pow {8};
     unsigned int primePoly[9] = {1, 0, 0, 0, 1, 1, 0, 1, 1};
     galois::GaloisField gf(pow, primePoly);

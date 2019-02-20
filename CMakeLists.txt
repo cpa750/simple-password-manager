@@ -13,4 +13,4 @@ add_executable (Simple-password-manager
                 AESEncryptor.cpp AESEncryptor.h main.cpp
                 ${GFLIB}/GaloisField.h ${GFLIB}/GaloisField.cpp
                 ${GFLIB}/GaloisFieldElement.h ${GFLIB}/GaloisFieldElement.cpp
-                ${GFLIB}/GaloisFieldPolynomial.h ${GFLIB}/GaloisFieldPolynomial.cpp)
+                ${GFLIB}/GaloisFieldPolynomial.h ${GFLIB}/GaloisFieldPolynomial.cpp KeySchedule.cpp KeySchedule.h)
