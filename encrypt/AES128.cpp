@@ -16,12 +16,24 @@ void AES128::addRoundKey(unsigned char* state[AES::numRows][AES::Nb],
     }
 }
 
-void AES128::round(unsigned char* state[AES::numRows][AES::Nb])
+void AES128::round(unsigned char* state[AES::numRows][AES::Nb], int round)
 {
-    // TODO: Implement this
+    byteSub(state);
+    shiftRow(state);
+    mixColumns(state);
+    addRoundKey(state, AES128::key, round);
 }
 
-void AES128::finalRound(unsigned char* state[AES::numRows][AES::Nb])
+void AES128::finalRound(unsigned char* state[AES::numRows][AES::Nb], int round)
 {
-    // TODO: Implement this
+    byteSub(state);
+    shiftRow(state);
+    addRoundKey(state, AES128::key, round);
+}
+
+void AES128::cipher()
+{
+    int round {0};
+    //addRoundKey()
+    // TODO: Finish implementation of this (must take a string and return a string)
 }

@@ -72,3 +72,8 @@ void AES::mixColumns(unsigned char* state[AES::numRows][AES::Nb])
          */
     }
 }
+
+void AES::cvtStrToState(std::string in)
+{
+    // TODO: implement this 
+}

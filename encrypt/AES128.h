@@ -14,10 +14,11 @@ private:
     void addRoundKey(unsigned char* state[AES::numRows][AES::Nb],
                              unsigned char* key, int round) final;
 
-    void round(unsigned char* state[AES::numRows][AES::Nb]) final;
-    void finalRound(unsigned char* state[AES::numRows][AES::Nb]) final;
+    void round(unsigned char* state[AES::numRows][AES::Nb], int round) final;
+    void finalRound(unsigned char* state[AES::numRows][AES::Nb], int round) final;
 
 public:
+    void cipher();
 
 };
 

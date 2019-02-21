@@ -21,11 +21,13 @@ protected:
     void byteSub(unsigned char* state[numRows][Nb]);
     void shiftRow(unsigned char* state[numRows][Nb]);
     void mixColumns(unsigned char* state[numRows][Nb]);
+    void cvtStrToState(std::string in);
+
     virtual void addRoundKey(unsigned char* state[numRows][Nb],
                      unsigned char* key, int round) = 0;
 
-    virtual void round(unsigned char* state[numRows][Nb]) = 0;
-    virtual void finalRound(unsigned char* state[numRows][Nb]) = 0;
+    virtual void round(unsigned char* state[numRows][Nb], int round) = 0;
+    virtual void finalRound(unsigned char* state[numRows][Nb], int round) = 0;
     // TODO: Implement these
 
 public:
