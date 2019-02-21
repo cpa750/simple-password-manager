@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "SBox.h"
+#include "LUT.h"
 
 /*
  * Base class for the Rijndael key schedule.

@@ -8,8 +8,8 @@ include_directories(${GFLIB})
 
 set(CMAKE_CXX_STANDARD 14)
 add_executable (Simple-password-manager
-                Hasher.cpp Hasher.h SBox.h
-        AES.cpp AES.h main.cpp
+                Hasher.cpp Hasher.h LUT.h
+                AES.cpp AES.h main.cpp
                 ${GFLIB}/GaloisField.h ${GFLIB}/GaloisField.cpp
                 ${GFLIB}/GaloisFieldElement.h ${GFLIB}/GaloisFieldElement.cpp
                 ${GFLIB}/GaloisFieldPolynomial.h ${GFLIB}/GaloisFieldPolynomial.cpp

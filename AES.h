@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "KeySchedule.h"
-#include "SBox.h"
+#include "LUT.h"
 
 #include "GaloisField.h"
 #include "GaloisFieldElement.h"
