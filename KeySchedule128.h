@@ -1,6 +1,7 @@
 #ifndef SIMPLE_PASSWORD_MANAGER_KEYSCHEDULE128_H
 #define SIMPLE_PASSWORD_MANAGER_KEYSCHEDULE128_H
 
+#include <cstring>
 #include <iostream>
 
 #include "KeySchedule.h"

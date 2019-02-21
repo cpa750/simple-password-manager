@@ -1,12 +1,10 @@
-#include "AESEncryptor.h"
+#include "AES.h"
 
-// TODO: replace C-style arrays with std::array/vector
-
-void AESEncryptor::byteSub(unsigned char* state[AESEncryptor::numRows][AESEncryptor::Nb])
+void AES::byteSub(unsigned char* state[AES::numRows][AES::Nb])
 {
-    for (int i {0}; i < AESEncryptor::numRows; ++i)
+    for (int i {0}; i < AES::numRows; ++i)
     {
-        for (int j {0}; j < AESEncryptor::Nb; ++j)
+        for (int j {0}; j < AES::Nb; ++j)
         {
             *state[i][j] = SBox::LUT[*state[i][j]];
             /*
@@ -17,17 +15,17 @@ void AESEncryptor::byteSub(unsigned char* state[AESEncryptor::numRows][AESEncryp
     }
 }
 
-void AESEncryptor::shiftRow(unsigned char* state[AESEncryptor::numRows][AESEncryptor::Nb])
+void AES::shiftRow(unsigned char* state[AES::numRows][AES::Nb])
 {
-    for (int i {0}; i < AESEncryptor::numRows; ++i)
+    for (int i {0}; i < AES::numRows; ++i)
     {
         if (i == 0) continue; // Skip shifting the first row according to the AES standard.
         else
         {
-            unsigned char row[AESEncryptor::Nb];
-            for (int j {0}; j < AESEncryptor::Nb; ++j)
+            unsigned char row[AES::Nb];
+            for (int j {0}; j < AES::Nb; ++j)
             {
-                int newPos = (j - i) % AESEncryptor::Nb;
+                int newPos = (j - i) % AES::Nb;
                 row[newPos] = *state[i][j];
                 /*
                  * This algorithm shifts the elements
@@ -36,7 +34,7 @@ void AESEncryptor::shiftRow(unsigned char* state[AESEncryptor::numRows][AESEncry
                  */
             }
 
-            for (int k {0}; k < AESEncryptor::Nb; ++k)
+            for (int k {0}; k < AES::Nb; ++k)
             {
                 *state[i][k] = row[k];
                 /*
@@ -48,9 +46,10 @@ void AESEncryptor::shiftRow(unsigned char* state[AESEncryptor::numRows][AESEncry
     }
 }
 
-void AESEncryptor::mixColumns(unsigned char* state[AESEncryptor::numRows][AESEncryptor::Nb])
+void AES::mixColumns(unsigned char* state[AES::numRows][AES::Nb])
 {
     // TODO: This function needs some cleaning up and optimization
+    // TODO: Honestly just write a different implementation that doesn't use a lib
     const unsigned int pow {8};
     unsigned int primePoly[9] = {1, 0, 0, 0, 1, 1, 0, 1, 1};
     galois::GaloisField gf(pow, primePoly);
@@ -65,27 +64,27 @@ void AESEncryptor::mixColumns(unsigned char* state[AESEncryptor::numRows][AESEnc
     galois::GaloisFieldPolynomial cxPoly(&gf, 3, cxElems);
     // Constructing c(x) as defined by AES
 
-    unsigned char column[AESEncryptor::numRows];
+    unsigned char column[AES::numRows];
 
     // Mix all of the columns in the state one at a time
-    for (int i {0}; i < AESEncryptor::Nb; ++i)
+    for (int i {0}; i < AES::Nb; ++i)
     {
         // Getting the column vector from the state
-        for (int j{0}; j < AESEncryptor::numRows; ++j)
+        for (int j{0}; j < AES::numRows; ++j)
         {
             column[j] = *state[j][i];
         }
 
-        galois::GaloisFieldElement elements[AESEncryptor::numRows];
+        galois::GaloisFieldElement elements[AES::numRows];
 
-        for (int k {0}; k < AESEncryptor::numRows; ++k)
+        for (int k {0}; k < AES::numRows; ++k)
         {
             galois::GaloisFieldElement gfe(&gf, column[k]);
             elements[k] = gfe;
             // Creating the elements array which will be used to create the polynomial
         }
 
-        galois::GaloisFieldPolynomial gfp(&gf, AESEncryptor::numRows-1, elements);
+        galois::GaloisFieldPolynomial gfp(&gf, AES::numRows-1, elements);
         // Constructing galois polynomial from a state column
 
         galois::GaloisFieldPolynomial res = gfp * cxPoly;
@@ -94,7 +93,7 @@ void AESEncryptor::mixColumns(unsigned char* state[AESEncryptor::numRows][AESEnc
         std::vector<galois::GaloisFieldElement> resCoeffs = res.getPolyElems();
         // Getting the resultant elements from the multiplication
 
-        for (int l {0}; l > AESEncryptor::numRows; ++l)
+        for (int l {0}; l > AES::numRows; ++l)
         {
             *state[l][i] = resCoeffs.at(l).getPolyCoeff();
             /*
@@ -103,9 +102,4 @@ void AESEncryptor::mixColumns(unsigned char* state[AESEncryptor::numRows][AESEnc
              */
         }
     }
-}
-
-void AESEncryptor::addRoundKey(unsigned char* state[AESEncryptor::numRows][AESEncryptor::Nb])
-{
-    //TODO: Implement this
 }

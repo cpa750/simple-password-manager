@@ -16,18 +16,21 @@ void KeySchedule128::expandKey(unsigned char* key)
     unsigned char a;
 
     /* We need 11 sets of sixteen bytes each for 128-bit mode */
-    while(c < 176) {
+    while(c < 176)
+    {
         /* Copy the temporary variable over from the last 4-byte
          * block */
-        for(a = 0; a < 4; a++)
+        for (a = 0; a < 4; a++)
             t[a] = key[a + c - 4];
         /* Every four blocks (of four bytes),
          * do a complex calculation */
-        if(c % 16 == 0) {
-            scheduleCore(t,i);
+        if (c % 16 == 0)
+        {
+            scheduleCore(t, i);
             i++;
         }
-        for(a = 0; a < 4; a++) {
+        for (a = 0; a < 4; a++)
+        {
             key[c] = key[c - 16] ^ t[a];
             c++;
         }
