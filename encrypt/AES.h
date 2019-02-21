@@ -7,10 +7,6 @@
 #include "KeySchedule.h"
 #include "LUT.h"
 
-#include "GaloisField.h"
-#include "GaloisFieldElement.h"
-#include "GaloisFieldPolynomial.h"
-
 class AES
 {
 protected:

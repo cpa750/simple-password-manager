@@ -2,16 +2,11 @@ cmake_minimum_required(VERSION 3.12.1)
 
 project(Simple_password_manager)
 
-set(GFLIB /home/cian/GaloisFieldArithmetic)
-
-include_directories(${GFLIB})
 
 set(CMAKE_CXX_STANDARD 14)
-add_executable (Simple-password-manager
-                Hasher.cpp Hasher.h LUT.h
-                AES.cpp AES.h main.cpp
-                ${GFLIB}/GaloisField.h ${GFLIB}/GaloisField.cpp
-                ${GFLIB}/GaloisFieldElement.h ${GFLIB}/GaloisFieldElement.cpp
-                ${GFLIB}/GaloisFieldPolynomial.h ${GFLIB}/GaloisFieldPolynomial.cpp
-                KeySchedule.cpp KeySchedule.h KeySchedule128.cpp KeySchedule128.h
-                AES128.cpp AES128.h)
+add_executable (Simple-password-manager main.cpp
+                hash/Hasher.cpp hash/Hasher.h encrypt/LUT.h
+                encrypt/AES.cpp encrypt/AES.h
+                encrypt/AES128.cpp encrypt/AES128.h
+                encrypt/KeySchedule.cpp encrypt/KeySchedule.h
+                encrypt/KeySchedule128.cpp encrypt/KeySchedule128.h)
