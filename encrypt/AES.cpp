@@ -76,6 +76,19 @@ void AES::mixColumns()
     }
 }
 
+std::string AES::cvtStateToStr()
+{
+    std::string res;
+    for (int i {0}; i < numRows; ++i)
+    {
+        for (int j {0}; j < Nb; ++j)
+        {
+            res.push_back(state[i][j]);
+        }
+    }
+    return res;
+}
+
 void AES::cvtStrToState(std::string plain)
 {
     /*
@@ -89,17 +102,4 @@ void AES::cvtStrToState(std::string plain)
         const char* chars = sub.c_str();
         std::memcpy(state[i/4], chars, 4);
     }
-}
-
-std::string AES::cvtStateToStr()
-{
-    std::string res;
-    for (int i {0}; i < numRows; ++i)
-    {
-        for (int j {0}; j < Nb; ++j)
-        {
-            res.push_back(state[i][j]);
-        }
-    }
-    return res;
 }

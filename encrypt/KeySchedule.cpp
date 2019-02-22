@@ -7,15 +7,6 @@
  * adherence to conventions.
  */
 
-void KeySchedule::rotate(unsigned char *in)
-{
-    unsigned char a, c;
-    a = in[0];
-    for (c = 0; c < 3; ++c)
-        in[c] = in[c + 1];
-    in[3] = a;
-}
-
 unsigned char KeySchedule::rcon(unsigned char in)
 {
     unsigned char c {1};
@@ -33,6 +24,15 @@ unsigned char KeySchedule::rcon(unsigned char in)
         --in;
     }
     return c;
+}
+
+void KeySchedule::rotate(unsigned char *in)
+{
+    unsigned char a, c;
+    a = in[0];
+    for (c = 0; c < 3; ++c)
+        in[c] = in[c + 1];
+    in[3] = a;
 }
 
 void KeySchedule::scheduleCore(unsigned char *in, unsigned char i)

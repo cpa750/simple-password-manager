@@ -15,31 +15,6 @@ void AES128::addRoundKey(unsigned char* key, int round)
     }
 }
 
-void AES128::cvtStrToKey(std::string plain)
-{
-    memcpy(key, plain.c_str(), 16);
-    /*
-     * Key string must be 16 chars long.
-     * This class does not ensure that this is the case,
-     * nor does it ensure that the key is padded correctly.
-     */
-}
-
-void AES128::round(int round)
-{
-    byteSub();
-    shiftRow();
-    mixColumns();
-    addRoundKey(key, round);
-}
-
-void AES128::finalRound(int round)
-{
-    byteSub();
-    shiftRow();
-    addRoundKey(key, round);
-}
-
 std::string AES128::cipher(std::string plainText, std::string keyIn)
 {
     std::string res;
@@ -60,4 +35,30 @@ std::string AES128::cipher(std::string plainText, std::string keyIn)
 
     res = cvtStateToStr();
     return res;
+}
+
+
+void AES128::cvtStrToKey(std::string plain)
+{
+    memcpy(key, plain.c_str(), 16);
+    /*
+     * Key string must be 16 chars long.
+     * This class does not ensure that this is the case,
+     * nor does it ensure that the key is padded correctly.
+     */
+}
+
+void AES128::finalRound(int round)
+{
+    byteSub();
+    shiftRow();
+    addRoundKey(key, round);
+}
+
+void AES128::round(int round)
+{
+    byteSub();
+    shiftRow();
+    mixColumns();
+    addRoundKey(key, round);
 }

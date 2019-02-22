@@ -14,8 +14,8 @@
 class KeySchedule
 {
 protected:
-    void rotate(unsigned char* in);
     unsigned char rcon(unsigned char in);
+    void rotate(unsigned char* in);
     void scheduleCore(unsigned char* in, unsigned char i);
 
 public:

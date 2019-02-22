@@ -7,15 +7,14 @@ class AES128 : public AES
 {
 private:
     const static int keySize {176};
-    const int Nr {10};
     unsigned char key[keySize];
-    // TODO: Initialize this
+    const int Nr {10};
 
     void addRoundKey(unsigned char* key, int round) final;
     void cvtStrToKey(std::string in) final;
-
-    void round(int round) final;
     void finalRound(int round) final;
+    void round(int round) final;
+
 
 public:
     std::string cipher(std::string plainText, std::string keyIn) final;
