@@ -11,14 +11,14 @@ private:
     unsigned char key[keySize];
     // TODO: Initialize this
 
-    void addRoundKey(unsigned char* state[AES::numRows][AES::Nb],
-                             unsigned char* key, int round) final;
+    void addRoundKey(unsigned char* key, int round) final;
+    void cvtStrToKey(std::string in) final;
 
-    void round(unsigned char* state[AES::numRows][AES::Nb], int round) final;
-    void finalRound(unsigned char* state[AES::numRows][AES::Nb], int round) final;
+    void round(int round) final;
+    void finalRound(int round) final;
 
 public:
-    void cipher();
+    std::string cipher(std::string plainText, std::string keyIn) final;
 
 };
 

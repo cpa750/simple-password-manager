@@ -1,26 +1,16 @@
 #include <iostream>
 #include <string>
 
+#include "encrypt/AES128.h"
 #include "encrypt/KeySchedule128.h"
 
 int main()
 {
-    unsigned char arr[16]
-    {
-        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-    };
-    unsigned char res[176];
+    std::string plainText = "\u0011\"3DUfw\u0088\u0099ª»ÌÝîÿ";
+    std::string plainKey = "0001020304050607";
 
-    KeySchedule128 keySchedule;
-    keySchedule.expandKey(arr);
-
-    for (int i {0}; i < 176; ++i)
-    {
-        if (i%15==0 && i > 0)
-            std::cout << std::hex << static_cast<int>(arr[i]) << ' ' << std::endl;
-        else
-            std::cout << std::hex << static_cast<int>(arr[i]) << ' ';
-    }
+    AES128 aes;
+    std::string enc = aes.cipher(plainText, plainKey);
+    std::cout << enc;
     return 0;
 }
-

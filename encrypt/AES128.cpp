@@ -1,13 +1,12 @@
 #include "AES128.h"
 
-void AES128::addRoundKey(unsigned char* state[AES::numRows][AES::Nb],
-                      unsigned char* key, int round)
+void AES128::addRoundKey(unsigned char* key, int round)
 {
-    for (int i {0}; i < AES::numRows; ++i)
+    for (int i {0}; i < numRows; ++i)
     {
-        for (int j {0}; j < AES::Nb; ++j)
+        for (int j {0}; j < Nb; ++j)
         {
-            *state[i][j] ^= key[round * 4 * AES::Nb + i * AES::Nb + j];
+            state[i][j] ^= key[round * 4 * Nb + i * Nb + j];
             /*
              * This element access arithmetic ensures that the key elements accessed
              * for each round and each element in the state are unique
@@ -16,24 +15,49 @@ void AES128::addRoundKey(unsigned char* state[AES::numRows][AES::Nb],
     }
 }
 
-void AES128::round(unsigned char* state[AES::numRows][AES::Nb], int round)
+void AES128::cvtStrToKey(std::string plain)
 {
-    byteSub(state);
-    shiftRow(state);
-    mixColumns(state);
-    addRoundKey(state, AES128::key, round);
+    memcpy(key, plain.c_str(), 16);
+    /*
+     * Key string must be 16 chars long.
+     * This class does not ensure that this is the case,
+     * nor does it ensure that the key is padded correctly.
+     */
 }
 
-void AES128::finalRound(unsigned char* state[AES::numRows][AES::Nb], int round)
+void AES128::round(int round)
 {
-    byteSub(state);
-    shiftRow(state);
-    addRoundKey(state, AES128::key, round);
+    byteSub();
+    shiftRow();
+    mixColumns();
+    addRoundKey(key, round);
 }
 
-void AES128::cipher()
+void AES128::finalRound(int round)
 {
-    int round {0};
-    //addRoundKey()
-    // TODO: Finish implementation of this (must take a string and return a string)
+    byteSub();
+    shiftRow();
+    addRoundKey(key, round);
+}
+
+std::string AES128::cipher(std::string plainText, std::string keyIn)
+{
+    std::string res;
+    cvtStrToKey(keyIn);
+    cvtStrToState(plainText);
+
+    KeySchedule128 ks;
+    ks.expandKey(key);
+
+    int roundNum {0};
+    addRoundKey(key, roundNum);
+    while (roundNum < Nr)
+    {
+        round(roundNum);
+        ++roundNum;
+    }
+    finalRound(roundNum);
+
+    res = cvtStateToStr();
+    return res;
 }
