@@ -96,9 +96,10 @@ void AES::cvtStrToState(std::string plain)
      * This class does not take care of concatenation of blocks,
      * padding input strings, or splitting the input into 128 bit blocks.
      */
+    int sz = plain.size();
     for (int i {0}; i < 16; i += 4)
     {
-        std::string sub = plain.substr(i, i+3);
+        std::string sub = plain.substr(i, 4);
         const char* chars = sub.c_str();
         std::memcpy(state[i/4], chars, 4);
     }

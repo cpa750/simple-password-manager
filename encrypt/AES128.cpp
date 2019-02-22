@@ -62,3 +62,70 @@ void AES128::round(int round)
     mixColumns();
     addRoundKey(key, round);
 }
+
+//================= Debugging functions =================//
+
+void AES128::test128(std::string& plainText, std::string& keyIn)
+{
+    cvtStrToKey(keyIn);
+    cvtStrToState(plainText);
+    printKey();
+    printState();
+
+    KeySchedule128 ks;
+    ks.expandKey(key);
+    printKey();
+    printState();
+
+    int roundNum {0};
+    addRoundKey(key, roundNum);
+    while (roundNum < Nr)
+    {
+        round(roundNum);
+        ++roundNum;
+        printState();
+        std::cout << " " << std::endl;
+    }
+    finalRound(roundNum);
+
+    printHexOut();
+
+}
+
+void AES128::printKey()
+{
+    for (int i{0}; i < keySize; ++i)
+    {
+        if (i%16==0) std::cout << std::hex << (int)key[i] << std::endl;
+        std::cout << std::hex << (int)key[i];
+    }
+    std::cout <<  " " << std::endl;
+}
+
+void AES128::printState()
+{
+    for (int i{0}; i < numRows; ++i)
+    {
+        for (int j{0}; j < Nb; ++j)
+        {
+            if (j == 3) std::cout << std::hex << (int)state[i][j] << std::endl;
+            else
+            {
+                std::cout << std::hex << (int)state[i][j];
+            }
+        }
+    }
+    std::cout << " " << std::endl;
+}
+
+void AES128::printHexOut()
+{
+    for (int i{0}; i < numRows; ++i)
+    {
+        for (int j{0}; j < Nb; ++j)
+        {
+            std::cout << std::hex << (int)state[i][j];
+        }
+    }
+    std::cout << " " << std::endl;
+}

@@ -15,9 +15,16 @@ private:
     void finalRound(int round) final;
     void round(int round) final;
 
+    // Debugging functions
+    void printKey();
+    void printState();
+    void printHexOut();
 
 public:
     std::string cipher(std::string plainText, std::string keyIn) final;
+
+    // Debugging function
+    void test128(std::string& plainText, std::string& keyIn);
 
 };
 

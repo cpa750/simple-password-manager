@@ -5,11 +5,11 @@
 
 int main()
 {
-    std::string plainText = "\u0011\"3DUfw\u0088\u0099ª»ÌÝîÿ";
-    std::string plainKey = "0001020304050607";
+    std::string a = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77};
+    a += "\u0088\u0099ª»ÌÝîÿ";
+    std::string b = "\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\n\u000B\f\n\u000E\u000F";
 
-    std::string cipherText = encrypt(plainText, plainKey, aes128);
-    std::cout << cipherText << std::endl;
+    test128(a, b, aes128);
 
     return 0;
 }
