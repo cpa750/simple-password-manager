@@ -1,27 +1,72 @@
 #include "Encrypt.h"
 
-std::vector<std::string> cvtToBlocks(std::string& plainIn)
+// TODO: add functionality to encrypt multiple blocks using CBC
+
+std::string CBC(stringVector& blocks, std::string& key,
+                std::string& initializationVector, EncryptionType encryptionType)
+{
+    std::string res;
+    std::string temp;
+    for (int i{0}; i < blocks.size(); ++i)
+    {
+        std::string toXor;
+        if (i == 0) toXor = initializationVector;
+        else toXor = temp;
+        /*
+         * temp should never be assigned when it's null
+         * as it will be set when the encrypption is
+         * completed (below)
+         */
+
+        unsigned char a[16];
+        unsigned char b[16];
+        memcpy(a, blocks[i].c_str(), 16);
+        memcpy(b, toXor.c_str(), 16);
+        for (int j {0}; j < 16; ++j) a[j] ^= b[j];
+
+        std::string in;
+        for (int k {0}; k < 16; ++k) in.push_back(a[k]);
+        /*
+         * std::string doesn't accept u_chars in its constructor
+         * hence this workaround
+         */
+
+        switch (encryptionType)
+        {
+            case aes128:
+            {
+                AES128 aes;
+                temp = aes.cipher(in, key);
+                res += temp;
+            }
+            case aes192:break;
+            case aes256:break;
+        }
+
+    }
+    return res;
+}
+
+stringVector cvtToBlocks(std::string& plainIn)
 {
     std::vector<std::string> out;
 
     if (plainIn.size() <= 16)
-    /*
-     * If the plaintext in is less than or equal to 16 characters,
-     * pad it then add to the out vector, which is then returned.
-     * It can be returned as there is no need for multiple blocks.
-     */
     {
         plainIn = padBlock(plainIn);
         out.push_back(plainIn);
         return out;
     }
+    /*
+     * If the plaintext in is less than or equal to 16 characters,
+     * pad it then add to the out vector, which is then returned.
+     * It can be returned as there is no need for multiple blocks.
+     */
 
-    size_t a = plainIn.size();
-    size_t b;
+
     for (int i {0}; i < plainIn.size() / 16; ++i)
     {
         std::string sub = plainIn.substr(i*16, 16);
-        b = sub.size();
         /*
          * Generating a substring from the original.
          * i*16 gets the value to start value, which is every
@@ -31,7 +76,6 @@ std::vector<std::string> cvtToBlocks(std::string& plainIn)
         else
         {
             sub = padBlock(sub);
-            b = sub.size();
             out.push_back(sub);
         }
     }
@@ -42,7 +86,7 @@ std::vector<std::string> cvtToBlocks(std::string& plainIn)
 std::string encrypt(std::string& plainIn, std::string& keyIn, EncryptionType encryptionType)
 {
     std::string out;
-    std::vector<std::string> blocks {cvtToBlocks(plainIn)};
+    stringVector blocks {cvtToBlocks(plainIn)};
     /*
      * This function is intended to take raw user input, then
      * handle the entire encryption process
@@ -53,20 +97,10 @@ std::string encrypt(std::string& plainIn, std::string& keyIn, EncryptionType enc
         return "";
         // TODO: make this throw an actual exception
     }
-    switch (encryptionType)
-    {
-        case aes128:
-        {
-            AES128 aes;
-            for (std::string& i: blocks) out += aes.cipher(i, keyIn);
-        };
-            break;
-        case aes192:break;
-        case aes256:break;
-        // TODO: implement these when the classes are written
-        default:
-            std::cout << "Not a valid encryption type!";
-    }
+    std::string iv {"aaaaaaaaaaaaaaaa"};
+    out = CBC(blocks, keyIn, iv, encryptionType);
+    // TODO: add functionality to use a randomized initialization vector
+    // ^ this will have to be stored alongside the password
 
     return out;
 }

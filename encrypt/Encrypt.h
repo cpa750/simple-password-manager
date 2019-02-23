@@ -7,6 +7,8 @@
 #include "AES.h"
 #include "AES128.h"
 
+typedef std::vector<std::string> stringVector;
+
 typedef enum EncryptionType
 {
     aes128,
@@ -15,6 +17,8 @@ typedef enum EncryptionType
 
 } EncryptionType;
 
+std::string CBC(stringVector& blocks, std::string& key,
+                std::string& initializationVector, EncryptionType encryptionType);
 std::vector<std::string> cvtToBlocks(std::string& plainIn);
 std::string encrypt(std::string& plainIn, std::string& keyIn, EncryptionType encryptionType);
 std::string padBlock(std::string& plainIn);

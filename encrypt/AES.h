@@ -1,5 +1,5 @@
-#ifndef SIMPLE_PASSWORD_MANAGER_AESENCRYPTOR_H
-#define SIMPLE_PASSWORD_MANAGER_AESENCRYPTOR_H
+#ifndef SIMPLE_PASSWORD_MANAGER_AES_H
+#define SIMPLE_PASSWORD_MANAGER_AES_H
 
 #include <cstring>
 #include <string>
@@ -15,7 +15,7 @@ protected:
     static const size_t Nb {4};
     unsigned char state[numRows][Nb];
 
-    // AES ecnryption functions
+    // AES encryption functions
     void byteSub();
     void shiftRow();
     void mixColumns();
@@ -36,4 +36,4 @@ public:
 
 };
 
-#endif //SIMPLE_PASSWORD_MANAGER_AESENCRYPTOR_H
+#endif //SIMPLE_PASSWORD_MANAGER_AES_H
