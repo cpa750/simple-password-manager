@@ -6,7 +6,7 @@ void AES128::addRoundKey(unsigned char* key, int round)
     {
         for (int j {0}; j < Nb; ++j)
         {
-            state[i][j] ^= key[round * 4 * Nb + i * Nb + j];
+            state[j][i] ^= key[round * 4 * Nb + i * Nb + j];
             /*
              * This element access arithmetic ensures that the key elements accessed
              * for each round and each element in the state are unique
@@ -65,39 +65,36 @@ void AES128::round(int round)
 
 //================= Debugging functions =================//
 
-void AES128::test128(std::string& plainText, std::string& keyIn)
+void AES128::test128(unsigned char stateIn[numRows][Nb], unsigned char keyIn[keySize])
 {
-    cvtStrToKey(keyIn);
-    cvtStrToState(plainText);
-    printKey();
-    printState();
+    for (int i {0}; i < numRows; ++i)
+    {
+        for (int j {0}; j < Nb; ++j) state[i][j] = stateIn[i][j];
+    }
+    memcpy(key, keyIn, keySize);
 
     KeySchedule128 ks;
     ks.expandKey(key);
-    printKey();
-    printState();
 
     int roundNum {0};
     addRoundKey(key, roundNum);
+    printKey();
     while (roundNum < Nr)
     {
-        round(roundNum);
-        ++roundNum;
+        round(++roundNum);
         printState();
-        std::cout << " " << std::endl;
     }
-    finalRound(roundNum);
-
+    finalRound(roundNum+1);
+    printState();
     printHexOut();
-
 }
 
 void AES128::printKey()
 {
     for (int i{0}; i < keySize; ++i)
     {
-        if (i%16==0) std::cout << std::hex << (int)key[i] << std::endl;
-        std::cout << std::hex << (int)key[i];
+        if (i%15==0 && i > 0) std::cout << std::hex << (int)key[i] << std::endl;
+        else std::cout << std::hex << (int)key[i];
     }
     std::cout <<  " " << std::endl;
 }

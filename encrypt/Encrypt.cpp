@@ -18,9 +18,10 @@ std::vector<std::string> cvtToBlocks(std::string& plainIn)
 
     size_t a = plainIn.size();
     size_t b;
-    for (int i {0}; i < plainIn.size() % 16; ++i)
+    for (int i {0}; i < plainIn.size() / 16; ++i)
     {
         std::string sub = plainIn.substr(i*16, 16);
+        b = sub.size();
         /*
          * Generating a substring from the original.
          * i*16 gets the value to start value, which is every
@@ -29,8 +30,9 @@ std::vector<std::string> cvtToBlocks(std::string& plainIn)
         if (sub.size() == 16) out.push_back(sub);
         else
         {
-            out.push_back(padBlock(sub));
+            sub = padBlock(sub);
             b = sub.size();
+            out.push_back(sub);
         }
     }
 
@@ -45,6 +47,12 @@ std::string encrypt(std::string& plainIn, std::string& keyIn, EncryptionType enc
      * This function is intended to take raw user input, then
      * handle the entire encryption process
      */
+    if (plainIn.empty())
+    {
+        std::cout << "Nothing to encrpyt, string empty" << std::endl;
+        return "";
+        // TODO: make this throw an actual exception
+    }
     switch (encryptionType)
     {
         case aes128:
@@ -77,27 +85,4 @@ std::string padBlock(std::string& plainIn)
     for (int i {0}; i < diff; ++i) out += '0';
 
     return out;
-}
-
-void test128(std::string& plainIn, std::string& keyIn, EncryptionType encryptionType)
-{
-    std::vector<std::string> blocks {cvtToBlocks(plainIn)};
-    /*
-     * This function is intended to take raw user input, then
-     * handle the entire encryption process
-     */
-    switch (encryptionType)
-    {
-        case aes128:
-        {
-            AES128 aes;
-            aes.test128(blocks[0], keyIn);
-        };
-            break;
-        case aes192:break;
-        case aes256:break;
-            // TODO: implement these when the classes are written
-        default:
-            std::cout << "Not a valid encryption type!";
-    }
 }

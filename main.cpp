@@ -5,11 +5,24 @@
 
 int main()
 {
-    std::string a = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77};
-    a += "\u0088\u0099ª»ÌÝîÿ";
-    std::string b = "\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\n\u000B\f\n\u000E\u000F";
+    unsigned char a[4][4]
+            {
+                    {0x32, 0x88, 0x31, 0xe0},
+                    {0x43, 0x5a, 0x31, 0x37},
+                    {0xf6, 0x30, 0x98, 0x07},
+                    {0xa8, 0x8d, 0xa2, 0x34}
+            };
+    unsigned char b[16]
+            {
+                    0x2b, 0x7e, 0x15, 0x16,
+                    0x28, 0xae, 0xd2, 0xa6,
+                    0xab, 0xf7, 0x15, 0x88,
+                    0x09, 0xcf, 0x4f, 0x3c
+            };
 
-    test128(a, b, aes128);
-
+    std::string c, d;
+    c = "hello";
+    d = c;
+    std::cout << encrypt(c, d, aes128);
     return 0;
 }

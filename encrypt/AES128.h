@@ -6,9 +6,9 @@
 class AES128 : public AES
 {
 private:
-    const static int keySize {176};
+    const static size_t keySize {176};
     unsigned char key[keySize];
-    const int Nr {10};
+    const int Nr {9};
 
     void addRoundKey(unsigned char* key, int round) final;
     void cvtStrToKey(std::string in) final;
@@ -24,7 +24,7 @@ public:
     std::string cipher(std::string plainText, std::string keyIn) final;
 
     // Debugging function
-    void test128(std::string& plainText, std::string& keyIn);
+    void test128(unsigned char stateIn[numRows][Nb], unsigned char keyIn[keySize]);
 
 };
 
