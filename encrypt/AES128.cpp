@@ -28,10 +28,9 @@ std::string AES128::cipher(std::string plainText, std::string keyIn)
     addRoundKey(key, roundNum);
     while (roundNum < Nr)
     {
-        round(roundNum);
-        ++roundNum;
+        round(++roundNum);
     }
-    finalRound(roundNum);
+    finalRound(roundNum+1);
 
     res = cvtStateToStr();
     return res;
@@ -125,4 +124,27 @@ void AES128::printHexOut()
         }
     }
     std::cout << " " << std::endl;
+}
+
+void AES128::test128(std::string plainText, std::string keyIn)
+{
+    std::string res;
+    cvtStrToKey(keyIn);
+    cvtStrToState(plainText);
+    printState();
+    printKey();
+
+    KeySchedule128 ks;
+    ks.expandKey(key);
+
+    int roundNum {0};
+    addRoundKey(key, roundNum);
+    while (roundNum < Nr)
+    {
+        round(++roundNum);
+    }
+    finalRound(roundNum+1);
+
+    res = cvtStateToStr();
+    std::cout << res <<std::endl;
 }

@@ -63,8 +63,9 @@ stringVector cvtToBlocks(std::string& plainIn)
      * It can be returned as there is no need for multiple blocks.
      */
 
-
-    for (int i {0}; i < plainIn.size() / 16; ++i)
+    size_t numLoops = plainIn.size() / 16;
+    if (0 != plainIn.size() % 16) ++numLoops;
+    for (int i {0}; i < numLoops; ++i)
     {
         std::string sub = plainIn.substr(i*16, 16);
         /*
@@ -98,7 +99,10 @@ std::string encrypt(std::string& plainIn, std::string& keyIn, EncryptionType enc
         // TODO: make this throw an actual exception
     }
     std::string iv {"aaaaaaaaaaaaaaaa"};
-    out = CBC(blocks, keyIn, iv, encryptionType);
+    std::string key {padBlock(keyIn)};
+    // Must pad the key in case it's < 16 chars
+
+    out = CBC(blocks, key, iv, encryptionType);
     // TODO: add functionality to use a randomized initialization vector
     // ^ this will have to be stored alongside the password
 

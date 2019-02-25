@@ -25,6 +25,7 @@ public:
 
     // Debugging function
     void test128(unsigned char stateIn[numRows][Nb], unsigned char keyIn[keySize]);
+    void test128(std::string plainText, std::string keyIn);
 
 };
 

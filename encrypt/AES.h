@@ -17,8 +17,13 @@ protected:
 
     // AES encryption functions
     void byteSub();
-    void shiftRow();
     void mixColumns();
+    void shiftRow();
+
+    // AES decryption funcions
+    void invByteSub();
+    void invShiftRow();
+    void invMixColumn();
 
     // Helper functions
     std::string cvtStateToStr();

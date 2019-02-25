@@ -1,5 +1,7 @@
 #include "AES.h"
 
+//================ AES encryption functions ================//
+
 void AES::byteSub()
 {
     for (int i {0}; i < numRows; ++i)
@@ -12,44 +14,6 @@ void AES::byteSub()
              * for the s-box
              */
         }
-    }
-}
-
-std::string AES::cvtStateToStr()
-{
-    std::string res;
-    for (int i {0}; i < numRows; ++i)
-    {
-        for (int j {0}; j < Nb; ++j)
-        {
-            res.push_back(state[j][i]);
-        }
-    }
-    return res;
-}
-
-void AES::cvtStrToState(std::string plain)
-{
-    /*
-     * String must be 128 bits (16 bytes) in length.
-     * This class does not take care of concatenation of blocks,
-     * padding input strings, or splitting the input into 128 bit blocks.
-     */
-    unsigned char temp[numRows];
-    for (int i {0}; i < 16; i += 4)
-    {
-        std::string sub = plain.substr(i, 4);
-        const char* chars = sub.c_str();
-        //memcpy(temp, chars, 4);
-        for (int j {0}; j < Nb; ++j) state[j][i/4] = temp[j];
-        /*
-         * This code copies the original string, in blocks of 4,
-         * to the columns of the state. memcpy() is required to
-         * remove the const and cast from signed to unsigned.
-         * i/4 gives the column in which to copy to, as i
-         * increments by 4 each time.
-         */
-        // TODO: fix this so the rows and columns are switched
     }
 }
 
@@ -106,5 +70,62 @@ void AES::shiftRow()
                 state[i][k] = row[k];
             }
         }
+    }
+}
+
+//================ AES decryption functions ================//
+
+void AES::invByteSub()
+{
+
+}
+
+void AES::invMixColumn()
+{
+
+}
+
+void AES::invShiftRow()
+{
+
+}
+
+//==================== Helper functions ====================//
+
+std::string AES::cvtStateToStr()
+{
+    std::string res;
+    for (int i {0}; i < numRows; ++i)
+    {
+        for (int j {0}; j < Nb; ++j)
+        {
+            res.push_back(state[j][i]);
+        }
+    }
+    return res;
+}
+
+void AES::cvtStrToState(std::string plain)
+{
+    /*
+     * String must be 128 bits (16 bytes) in length.
+     * This class does not take care of concatenation of blocks,
+     * padding input strings, or splitting the input into 128 bit blocks.
+     */
+    unsigned char temp[numRows];
+    for (int i {0}; i < 16; i += 4)
+    {
+        std::string sub = plain.substr(i, 4);
+        const char* chars = sub.c_str();
+        memcpy(temp, chars, 4);
+        for (int j {0}; j < Nb; ++j) state[j][i/4] = temp[j];
+        /*
+         * This code copies the original string, in blocks of 4,
+         * to the columns of the state. memcpy() is required to
+         * remove the const and cast from signed to unsigned.
+         * i/4 gives the column in which to copy to, as i
+         * increments by 4 each time.
+         */
+        // TODO: fix this so the rows and columns are switched
     }
 }

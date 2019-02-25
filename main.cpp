@@ -21,8 +21,10 @@ int main()
             };
 
     std::string c, d;
-    c = "hello";
+    c = "fuck you m9 ad;flkjasdf;lkjasdf";
     d = c;
-    std::cout << encrypt(c, d, aes128);
+    AES128 aes;
+    //aes.test128(c, d);
+    std::cout << encrypt(c, d, aes128) << std::endl;
     return 0;
 }
