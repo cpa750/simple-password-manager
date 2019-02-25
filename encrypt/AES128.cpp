@@ -6,7 +6,7 @@ void AES128::addRoundKey(unsigned char* key, int round)
 {
     for (int i {0}; i < numRows; ++i)
     {
-        for (int j {0}; j < Nb; ++j)
+        for (int j{0}; j < Nb; ++j)
         {
             state[j][i] ^= key[round * 4 * Nb + i * Nb + j];
             /*
@@ -75,13 +75,13 @@ std::string AES128::invCipher(std::string plainText, std::string keyIn)
     KeySchedule128 ks;
     ks.expandKey(key);
 
-    int roundNum {Nr};
+    int roundNum {Nr + 1};
     addRoundKey(key, roundNum);
-    while (roundNum > 0)
+    while (roundNum > 1)
     {
         round(--roundNum);
     }
-    finalRound(roundNum-1);
+    finalRound(--roundNum);
 
     res = cvtStateToStr();
     return res;
@@ -160,7 +160,7 @@ void AES128::printHexOut()
     {
         for (int j{0}; j < Nb; ++j)
         {
-            std::cout << std::hex << (int)state[i][j];
+            std::cout << std::hex << (int)state[j][i];
         }
     }
     std::cout << " " << std::endl;
@@ -187,4 +187,30 @@ void AES128::test128(std::string plainText, std::string keyIn)
 
     res = cvtStateToStr();
     std::cout << res <<std::endl;
+}
+
+void AES128::testInv128(unsigned char stateIn[numRows][Nb], unsigned char keyIn[keySize])
+{
+    for (int i {0}; i < numRows; ++i)
+    {
+        for (int j {0}; j < Nb; ++j) state[i][j] = stateIn[i][j];
+    }
+    memcpy(key, keyIn, keySize);
+
+    KeySchedule128 ks;
+    ks.expandKey(key);
+
+    int roundNum {Nr+1};
+    addRoundKey(key, roundNum);
+    std::cout << "Round " << Nr - roundNum + 2 << " in:"<< std::endl;
+    printHexOut();
+    while (roundNum > 1)
+    {
+        std::cout << "Round " << Nr - roundNum + 3 << " in:"<< std::endl;
+        invRound(--roundNum);
+        printHexOut();
+    }
+    invFinalRound(--roundNum);
+    std::cout << "Output: " << std::endl;
+    printHexOut();
 }

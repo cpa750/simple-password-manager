@@ -178,6 +178,5 @@ void AES::cvtStrToState(std::string plain)
          * i/4 gives the column in which to copy to, as i
          * increments by 4 each time.
          */
-        // TODO: fix this so the rows and columns are switched
     }
 }

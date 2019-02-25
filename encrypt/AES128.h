@@ -29,9 +29,11 @@ public:
     std::string cipher(std::string plainText, std::string keyIn) final;
     std::string invCipher(std::string plainText, std::string keyIn) final;
 
-    // Debugging function
+    // Debugging functions
     void test128(unsigned char stateIn[numRows][Nb], unsigned char keyIn[keySize]);
     void test128(std::string plainText, std::string keyIn);
+
+    void testInv128(unsigned char stateIn[numRows][Nb], unsigned char keyIn[keySize]);
 
 };
 
