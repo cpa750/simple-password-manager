@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 
+#include "encrypt/Decrypt.h"
 #include "encrypt/Encrypt.h"
 
 int main()
@@ -21,10 +22,12 @@ int main()
             };
 
     std::string c, d;
-    c = "this is a string that is longer than sixteen characters in length";
+    c = "hello";
     d = c;
-    AES128 aes;
-    aes.testInv128(a, b);
-    std::cout << encrypt(c, d, aes128) << std::endl;
+    //AES128 aes;
+    //aes.testInv128(a, b);
+    std::string cipher = encrypt(c, d, aes128);
+    std::cout << cipher << std::endl;
+    std::cout << decrypt(cipher, d, aes128) << std::endl;
     return 0;
 }

@@ -1,10 +1,15 @@
 #include "Encrypt.h"
 
-// TODO: add functionality to encrypt multiple blocks using CBC
-
 std::string CBC(stringVector& blocks, std::string& key,
                 std::string& initializationVector, EncryptionType encryptionType)
 {
+    /*
+     * This function employs the CBC mode of operation
+     * using AES to encrypt an arbitrary number of blocks.
+     * See https://en.wikipedia.org/wiki
+     * /Block_cipher_mode_of_operation#Cipher_Block_Chaining_(CBC)
+     * for information on how this process works.
+     */
     std::string res;
     std::string temp;
     for (int i{0}; i < blocks.size(); ++i)
@@ -14,7 +19,7 @@ std::string CBC(stringVector& blocks, std::string& key,
         else toXor = temp;
         /*
          * temp should never be assigned when it's null
-         * as it will be set when the encrypption is
+         * as it will be set when the encryption is
          * completed (below)
          */
 
@@ -39,7 +44,7 @@ std::string CBC(stringVector& blocks, std::string& key,
                 temp = aes.cipher(in, key);
                 res += temp;
             }
-            case aes192:break;
+            break;
             case aes256:break;
         }
 

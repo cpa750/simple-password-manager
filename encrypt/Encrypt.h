@@ -12,7 +12,6 @@ typedef std::vector<std::string> stringVector;
 typedef enum EncryptionType
 {
     aes128,
-    aes192,
     aes256
 
 } EncryptionType;
