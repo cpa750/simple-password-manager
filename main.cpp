@@ -22,12 +22,13 @@ int main()
             };
 
     std::string c, d;
-    c = "hello";
+    c = "hello00000000000";
     d = c;
-    //AES128 aes;
-    //aes.testInv128(a, b);
-    std::string cipher = encrypt(c, d, aes128);
-    std::cout << cipher << std::endl;
-    std::cout << decrypt(cipher, d, aes128) << std::endl;
+    AES128 aes;
+    std::string cipher = aes.cipher(c, d);
+    aes.test128(c, d);
+    std::string plain = aes.invCipher(cipher, d);
+    std::cout << cipher << '\n' << plain;
+
     return 0;
 }

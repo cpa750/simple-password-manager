@@ -7,11 +7,11 @@ class AES128 : public AES
 {
 private:
     const static size_t keySize {176};
-    unsigned char key[keySize];
+    u_char key[keySize];
     const int Nr {9};
 
     // AES encryption functions
-    void addRoundKey(unsigned char* key, int round) final;
+    void addRoundKey(u_char* key, int round) final;
     void cvtStrToKey(std::string in) final;
     void finalRound(int round) final;
     void round(int round) final;
@@ -30,10 +30,10 @@ public:
     std::string invCipher(std::string plainText, std::string keyIn) final;
 
     // Debugging functions
-    void test128(unsigned char stateIn[numRows][Nb], unsigned char keyIn[keySize]);
+    void test128(u_char stateIn[numRows][Nb], u_char keyIn[keySize]);
     void test128(std::string plainText, std::string keyIn);
 
-    void testInv128(unsigned char stateIn[numRows][Nb], unsigned char keyIn[keySize]);
+    void testInv128(u_char stateIn[numRows][Nb], u_char keyIn[keySize]);
 
 };
 

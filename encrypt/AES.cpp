@@ -165,12 +165,15 @@ void AES::cvtStrToState(std::string plain)
      * padding input strings, or splitting the input into 128 bit blocks.
      */
     unsigned char temp[numRows];
-    for (int i {0}; i < 16; i += 4)
+    for (int i {0}; i < 4; ++i)
     {
-        std::string sub = plain.substr(i, 4);
+        std::string sub = plain.substr(i*4, 4);
         const char* chars = sub.c_str();
         memcpy(temp, chars, 4);
-        for (int j {0}; j < Nb; ++j) state[j][i/4] = temp[j];
+        for (int j {0}; j < Nb; ++j)
+        {
+            state[j][i] = temp[j];
+        }
         /*
          * This code copies the original string, in blocks of 4,
          * to the columns of the state. memcpy() is required to
