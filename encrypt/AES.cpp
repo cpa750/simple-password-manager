@@ -50,7 +50,7 @@ void AES::mixColumns()
 
 void AES::shiftRow()
 {
-      for (int i {0}; i < numRows; ++i)
+    for (int i {0}; i < numRows; ++i)
     {
         if (i > 0)
         {
@@ -65,10 +65,7 @@ void AES::shiftRow()
                  * standard, placing them in the temp array row.
                  */
             }
-            for (int k {0}; k < Nb; ++k)
-            {
-                state[i][k] = row[k];
-            }
+            memcpy(state[i], row, 4);
         }
     }
 }
@@ -77,17 +74,72 @@ void AES::shiftRow()
 
 void AES::invByteSub()
 {
-
+    for (int i {0}; i < numRows; ++i)
+    {
+        for (int j {0}; j < Nb; ++j)
+        {
+            state[i][j] = LUT::invSBox[state[i][j]];
+            /*
+             * Implementation of the lookup table
+             * for the s-box
+             */
+        }
+    }
 }
 
 void AES::invMixColumn()
 {
+    using namespace LUT;
+    unsigned char col[numRows];
+    for (int i {0}; i < Nb; ++i)
+    {
+        for (int j {0}; j < numRows; ++j)
+        {
+            col[j] = state[j][i];
+            /*
+             * These loops construct a 1 dimensional column vector from
+             * one column of the state. This will repeat for every column in the state.
+             * The reason this copy is necessary is because the transformation is
+             * dependent on the inputs, which cannot change over the operation.
+             * Hence, a copy that is not modified.
+             * Reminder: b/c the rows and columns are switched you can't write
+             * this using memcpy!
+             */
+        }
 
+        state[0][i] = GMult14[col[0]] ^ GMult11[col[1]] ^ GMult13[col[2]] ^ GMult9[col[3]];
+        state[1][i] = GMult9[col[0]] ^ GMult14[col[1]] ^ GMult11[col[2]] ^ GMult13[col[3]];
+        state[2][i] = GMult13[col[0]] ^ GMult9[col[1]] ^ GMult14[col[2]] ^ GMult11[col[3]];
+        state[3][i] = GMult11[col[0]] ^ GMult13[col[1]] ^ GMult9[col[2]] ^ GMult14[col[3]];
+        /*
+         * The above code applies the invMixColumns operation specified by the AES standard.
+         * The explanation for how this operation is carried out and the lookup tables used
+         * can be found at
+         * https://ipfs.io/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco/wiki/Rijndael_mix_columns.html
+         */
+    }
 }
 
 void AES::invShiftRow()
 {
-
+    for (int i {0}; i < numRows; ++i)
+    {
+        if (i > 0)
+        {
+            unsigned char row[Nb];
+            for (int j {0}; j < Nb; ++j)
+            {
+                int newPos = (i + j) % Nb;
+                row[newPos] = state[i][j];
+                /*
+                 * This algorithm shifts the elements
+                 * in each row of the state according to the AES
+                 * standard, placing them in the temp array row.
+                 */
+            }
+            memcpy(state[i], row, 4);
+        }
+    }
 }
 
 //==================== Helper functions ====================//

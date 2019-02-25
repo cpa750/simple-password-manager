@@ -35,9 +35,13 @@ protected:
     virtual void finalRound(int round) = 0;
     virtual void round(int round) = 0;
 
+    virtual void invRound(int round) = 0;
+    virtual void invFinalRound(int round) = 0;
+
 public:
     // Main encryption and decryption functions
     virtual std::string cipher(std::string plainText, std::string keyIn) = 0;
+    virtual std::string invCipher(std::string plainText, std::string keyIn) = 0;
 
 };
 

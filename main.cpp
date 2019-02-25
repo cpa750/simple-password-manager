@@ -21,7 +21,7 @@ int main()
             };
 
     std::string c, d;
-    c = "fuck you m9 ad;flkjasdf;lkjasdf";
+    c = "this is a message that is longer than 16 bytes";
     d = c;
     AES128 aes;
     //aes.test128(c, d);

@@ -1,5 +1,7 @@
 #include "AES128.h"
 
+//================= AES encryption functions =================//
+
 void AES128::addRoundKey(unsigned char* key, int round)
 {
     for (int i {0}; i < numRows; ++i)
@@ -62,7 +64,45 @@ void AES128::round(int round)
     addRoundKey(key, round);
 }
 
-//================= Debugging functions =================//
+//================= AES decryption functions =================//
+
+std::string AES128::invCipher(std::string plainText, std::string keyIn)
+{
+    std::string res;
+    cvtStrToKey(keyIn);
+    cvtStrToState(plainText);
+
+    KeySchedule128 ks;
+    ks.expandKey(key);
+
+    int roundNum {Nr};
+    addRoundKey(key, roundNum);
+    while (roundNum > 0)
+    {
+        round(--roundNum);
+    }
+    finalRound(roundNum-1);
+
+    res = cvtStateToStr();
+    return res;
+}
+
+void AES128::invFinalRound(int round)
+{
+    invShiftRow();
+    invByteSub();
+    addRoundKey(key, round);
+}
+
+void AES128::invRound(int round)
+{
+    invShiftRow();
+    invByteSub();
+    addRoundKey(key, round);
+    invMixColumn();
+}
+
+//==================== Debugging functions ===================//
 
 void AES128::test128(unsigned char stateIn[numRows][Nb], unsigned char keyIn[keySize])
 {
