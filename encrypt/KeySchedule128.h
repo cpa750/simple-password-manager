@@ -9,7 +9,7 @@
 class KeySchedule128 : public KeySchedule
 {
 public:
-    void expandKey(unsigned char* key) final;
+    void expandKey(std::array<u_char, 176>& key) final;
 };
 
 

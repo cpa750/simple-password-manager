@@ -27,8 +27,8 @@ int main()
     AES128 aes;
     std::string cipher = aes.cipher(c, d);
     aes.test128(c, d);
-    std::string plain = aes.invCipher(cipher, d);
-    std::cout << cipher << '\n' << plain;
+    //std::string plain = aes.invCipher(cipher, d);
+    //std::cout << cipher << '\n' << plain;
 
     return 0;
 }

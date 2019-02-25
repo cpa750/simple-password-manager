@@ -7,9 +7,9 @@
  * adherence to conventions.
  */
 
-void KeySchedule128::expandKey(unsigned char* key)
+void KeySchedule128::expandKey(std::array<u_char, 176>& key)
 {
-    unsigned char t[4];
+    std::array<u_char, 4> t;
     /* c is 16 because the first sub-key is the user-supplied key */
     unsigned char c = 16;
     unsigned char i = 1;
@@ -20,7 +20,7 @@ void KeySchedule128::expandKey(unsigned char* key)
     {
         /* Copy the temporary variable over from the last 4-byte
          * block */
-        for (a = 0; a < 4; a++)
+        for (a = 0; a < 4; ++a)
             t[a] = key[a + c - 4];
         /* Every four blocks (of four bytes),
          * do a complex calculation */
@@ -29,10 +29,10 @@ void KeySchedule128::expandKey(unsigned char* key)
             scheduleCore(t, i);
             i++;
         }
-        for (a = 0; a < 4; a++)
+        for (a = 0; a < 4; ++a)
         {
             key[c] = key[c - 16] ^ t[a];
-            c++;
+            ++c;
         }
     }
 }

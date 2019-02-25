@@ -20,20 +20,11 @@ void AES::byteSub()
 void AES::mixColumns()
 {
     using namespace LUT;
-    unsigned char col[numRows];
+    std::array<u_char, numRows> col;
     for (int i {0}; i < Nb; ++i)
     {
         for (int j {0}; j < numRows; ++j)
-        {
             col[j] = state[j][i];
-            /*
-             * These loops construct a 1 dimensional column vector from
-             * one column of the state. This will repeat for every column in the state.
-             * The reason this copy is necessary is because the transformation is
-             * dependent on the inputs, which cannot change over the operation.
-             * Hence, a copy that is not modified.
-             */
-        }
 
         state[0][i] = GMult2[col[0]] ^ GMult3[col[1]] ^ col[2] ^ col[3];
         state[1][i] = col[0] ^ GMult2[col[1]] ^ GMult3[col[2]] ^ col[3];
@@ -54,7 +45,7 @@ void AES::shiftRow()
     {
         if (i > 0)
         {
-            unsigned char row[Nb];
+            std::array<u_char, Nb> row;
             for (int j {0}; j < Nb; ++j)
             {
                 int newPos = (j - i) % Nb;
@@ -65,7 +56,7 @@ void AES::shiftRow()
                  * standard, placing them in the temp array row.
                  */
             }
-            memcpy(state[i], row, 4);
+            state[i] = row;
         }
     }
 }
@@ -90,22 +81,11 @@ void AES::invByteSub()
 void AES::invMixColumn()
 {
     using namespace LUT;
-    unsigned char col[numRows];
+    std::array<u_char, numRows> col;
     for (int i {0}; i < Nb; ++i)
     {
         for (int j {0}; j < numRows; ++j)
-        {
             col[j] = state[j][i];
-            /*
-             * These loops construct a 1 dimensional column vector from
-             * one column of the state. This will repeat for every column in the state.
-             * The reason this copy is necessary is because the transformation is
-             * dependent on the inputs, which cannot change over the operation.
-             * Hence, a copy that is not modified.
-             * Reminder: b/c the rows and columns are switched you can't write
-             * this using memcpy!
-             */
-        }
 
         state[0][i] = GMult14[col[0]] ^ GMult11[col[1]] ^ GMult13[col[2]] ^ GMult9[col[3]];
         state[1][i] = GMult9[col[0]] ^ GMult14[col[1]] ^ GMult11[col[2]] ^ GMult13[col[3]];
@@ -126,7 +106,7 @@ void AES::invShiftRow()
     {
         if (i > 0)
         {
-            unsigned char row[Nb];
+            std::array<u_char, Nb> row;
             for (int j {0}; j < Nb; ++j)
             {
                 int newPos = (i + j) % Nb;
@@ -137,7 +117,7 @@ void AES::invShiftRow()
                  * standard, placing them in the temp array row.
                  */
             }
-            memcpy(state[i], row, 4);
+            state[i] = row;
         }
     }
 }

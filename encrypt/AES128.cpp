@@ -2,7 +2,7 @@
 
 //================= AES encryption functions =================//
 
-void AES128::addRoundKey(unsigned char* key, int round)
+void AES128::addRoundKey(std::array<u_char, 176>& key, int round)
 {
     for (int i {0}; i < numRows; ++i)
     {
@@ -36,17 +36,6 @@ std::string AES128::cipher(std::string plainText, std::string keyIn)
 
     res = cvtStateToStr();
     return res;
-}
-
-
-void AES128::cvtStrToKey(std::string plain)
-{
-    memcpy(key, plain.c_str(), 16);
-    /*
-     * Key string must be 16 chars long.
-     * This class does not ensure that this is the case,
-     * nor does it ensure that the key is padded correctly.
-     */
 }
 
 void AES128::finalRound(int round)
@@ -110,7 +99,6 @@ void AES128::test128(unsigned char stateIn[numRows][Nb], unsigned char keyIn[key
     {
         for (int j {0}; j < Nb; ++j) state[i][j] = stateIn[i][j];
     }
-    memcpy(key, keyIn, keySize);
 
     KeySchedule128 ks;
     ks.expandKey(key);
@@ -195,7 +183,6 @@ void AES128::testInv128(unsigned char stateIn[numRows][Nb], unsigned char keyIn[
     {
         for (int j {0}; j < Nb; ++j) state[i][j] = stateIn[i][j];
     }
-    memcpy(key, keyIn, keySize);
 
     KeySchedule128 ks;
     ks.expandKey(key);

@@ -14,12 +14,12 @@
 class KeySchedule
 {
 protected:
-    unsigned char rcon(unsigned char in);
-    void rotate(unsigned char* in);
-    void scheduleCore(unsigned char* in, unsigned char i);
+    unsigned char rcon(u_char in);
+    void rotate(std::array<u_char, 4>& in);
+    void scheduleCore(std::array<u_char, 4>& in, u_char i);
 
 public:
-    virtual void expandKey(unsigned char* key) = 0;
+    virtual void expandKey(std::array<u_char, 176>& key) = 0;
 
 };
 

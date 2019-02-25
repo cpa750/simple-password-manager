@@ -7,14 +7,14 @@
  * adherence to conventions.
  */
 
-unsigned char KeySchedule::rcon(unsigned char in)
+u_char KeySchedule::rcon(u_char in)
 {
-    unsigned char c {1};
+    u_char c {1};
     if (in == 0)
         return 0;
     while(in != 1)
     {
-        unsigned char b;
+        u_char b;
         b = c & 0x80;
         c <<= 1;
         if (b == 0x80)
@@ -26,16 +26,16 @@ unsigned char KeySchedule::rcon(unsigned char in)
     return c;
 }
 
-void KeySchedule::rotate(unsigned char *in)
+void KeySchedule::rotate(std::array<u_char, 4>& in)
 {
-    unsigned char a, c;
+    u_char a, c;
     a = in[0];
     for (c = 0; c < 3; ++c)
         in[c] = in[c + 1];
     in[3] = a;
 }
 
-void KeySchedule::scheduleCore(unsigned char *in, unsigned char i)
+void KeySchedule::scheduleCore(std::array<u_char, 4>& in, u_char i)
 {
     char a;
     /* Rotate the input 8 bits to the left */

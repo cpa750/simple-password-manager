@@ -1,19 +1,20 @@
 #ifndef SIMPLE_PASSWORD_MANAGER_AES_H
 #define SIMPLE_PASSWORD_MANAGER_AES_H
 
-#include <cstring>
+#include <array>
 #include <string>
 #include <vector>
 
 #include "KeySchedule128.h"
 #include "LUT.h"
+#include "typedefs.h"
 
 class AES
 {
 protected:
     static const size_t numRows {4};
     static const size_t Nb {4};
-    u_char state[numRows][Nb];
+    State state;
 
     // AES encryption functions
     void byteSub();
@@ -30,8 +31,7 @@ protected:
     void cvtStrToState(std::string plain);
 
     // Pure virtual functions
-    virtual void addRoundKey(u_char* key, int round) = 0;
-    virtual void cvtStrToKey(std::string in) = 0;
+    virtual void addRoundKey(std::array<u_char, 176>& key, int round) = 0;
     virtual void finalRound(int round) = 0;
     virtual void round(int round) = 0;
 

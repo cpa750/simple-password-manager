@@ -7,12 +7,11 @@ class AES128 : public AES
 {
 private:
     const static size_t keySize {176};
-    u_char key[keySize];
+    std::array<u_char, keySize> key;
     const int Nr {9};
 
     // AES encryption functions
-    void addRoundKey(u_char* key, int round) final;
-    void cvtStrToKey(std::string in) final;
+    void addRoundKey(std::array<u_char, 176>& key, int round) final;
     void finalRound(int round) final;
     void round(int round) final;
 
