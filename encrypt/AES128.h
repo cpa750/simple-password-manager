@@ -8,7 +8,7 @@ class AES128 : public AES
 private:
     const static size_t keySize {176};
     std::array<u_char, keySize> key;
-    const int Nr {9};
+    const int Nr {10};
 
     // AES encryption functions
     void addRoundKey(std::array<u_char, 176>& key, int round) final;
@@ -19,21 +19,12 @@ private:
     void invFinalRound(int round) final;
     void invRound(int round) final;
 
-    // Debugging functions
-    void printKey();
-    void printState();
-    void printHexOut();
-
 public:
-    std::string cipher(std::string plainText, std::string keyIn) final;
-    std::string invCipher(std::string plainText, std::string keyIn) final;
+    State cipher(State state, std::array<u_char, 176> keyIn) final;
+    State invCipher(State state, std::array<u_char, 176> keyIn) final;
 
-    // Debugging functions
-    void test128(u_char stateIn[numRows][Nb], u_char keyIn[keySize]);
-    void test128(std::string plainText, std::string keyIn);
-
-    void testInv128(u_char stateIn[numRows][Nb], u_char keyIn[keySize]);
-
+    void printState();
+    void printKey();
 };
 
 #endif //SIMPLE_PASSWORD_MANAGER_AES128_H

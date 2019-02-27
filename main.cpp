@@ -6,14 +6,40 @@
 
 int main()
 {
-    unsigned char a[4][4]
+    AES128 aes;
+
+    State inv_a
             {
-                    {0x69, 0x6a, 0xd8, 0x70},
-                    {0xc4, 0x7b, 0xcd, 0xb4},
-                    {0xe0, 0x04, 0xb7, 0xc5},
-                    {0xd8, 0x30, 0x80, 0x5a}
+                    0x39, 0x02, 0xdc, 0x19,
+                    0x25, 0xdc, 0x11, 0x6a,
+                    0x84, 0x09, 0x85, 0x0b,
+                    0x1d, 0xfb, 0x97, 0x32
             };
-    unsigned char b[16]
+
+    State a
+            {
+                    0x32, 0x88, 0x31, 0xe0,
+                    0x43, 0x5a, 0x31, 0x37,
+                    0xf6, 0x30, 0x98, 0x07,
+                    0xa8, 0x8d, 0xa2, 0x34
+            };
+    std::array<u_char, 176> b
+            {
+                    0x2b, 0x7e, 0x15, 0x16,
+                    0x28, 0xae, 0xd2, 0xa6,
+                    0xab, 0xf7, 0x15, 0x88,
+                    0x09, 0xcf, 0x4f, 0x3c
+            };
+
+    State test_vec
+            {
+                    0x00, 0x44, 0x88, 0xcc,
+                    0x11, 0x55, 0x99, 0xdd,
+                    0x22, 0x66, 0xaa, 0xee,
+                    0x33, 0x77, 0xbb, 0xff
+            };
+
+    std::array<u_char, 176> test_vec_key
             {
                     0x00, 0x01, 0x02, 0x03,
                     0x04, 0x05, 0x06, 0x07,
@@ -21,14 +47,23 @@ int main()
                     0x0c, 0x0d, 0x0e, 0x0f
             };
 
-    std::string c, d;
-    c = "hello00000000000";
-    d = c;
-    AES128 aes;
-    std::string cipher = aes.cipher(c, d);
-    aes.test128(c, d);
-    //std::string plain = aes.invCipher(cipher, d);
-    //std::cout << cipher << '\n' << plain;
+    State inv_test_vec
+            {
+                    0x69, 0x6a, 0xd8, 0x70,
+                    0xc4, 0x7b, 0xcd, 0xb4,
+                    0xe0, 0x04, 0xb7, 0xc5,
+                    0xd8, 0x30, 0x80, 0x5a
+            };
 
+    State s = aes.invCipher(inv_test_vec, test_vec_key);
+
+    for (int i {0}; i < 4; ++i)
+    {
+        for (int j {0}; j < 4; ++j)
+        {
+            std::cout << std::hex << (int)s[i][j];
+            if (j == 3) std::cout << '\n';
+        }
+    }
     return 0;
 }

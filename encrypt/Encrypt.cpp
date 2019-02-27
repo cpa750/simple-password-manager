@@ -1,131 +1,45 @@
 #include "Encrypt.h"
 
-std::string CBC(stringVector& blocks, std::string& key,
-                std::string& initializationVector, EncryptionType encryptionType)
+std::string CBC(std::string in, std::string key)
 {
-    /*
-     * This function employs the CBC mode of operation
-     * using AES to encrypt an arbitrary number of blocks.
-     * See https://en.wikipedia.org/wiki
-     * /Block_cipher_mode_of_operation#Cipher_Block_Chaining_(CBC)
-     * for information on how this process works.
-     */
-    std::string res;
-    std::string temp;
-    for (int i{0}; i < blocks.size(); ++i)
+    std::string plainText = padString(in);
+    std::vector<State> states = cvtStrToStates(in);
+
+    // TODO: Write the rest of the CBC algorithm
+
+}
+
+std::vector<State> cvtStrToStates(std::string in)
+{
+    std::vector<State> out;
+    for (int i {0}; i < in.size() / 16; ++i)
     {
-        std::string toXor;
-        if (i == 0) toXor = initializationVector;
-        else toXor = temp;
-        /*
-         * temp should never be assigned when it's null
-         * as it will be set when the encryption is
-         * completed (below)
-         */
-
-        unsigned char a[16];
-        unsigned char b[16];
-        memcpy(a, blocks[i].c_str(), 16);
-        memcpy(b, toXor.c_str(), 16);
-        for (int j {0}; j < 16; ++j) a[j] ^= b[j];
-
-        std::string in;
-        for (int k {0}; k < 16; ++k) in.push_back(a[k]);
-        /*
-         * std::string doesn't accept u_chars in its constructor
-         * hence this workaround
-         */
-
-        switch (encryptionType)
+        State s;
+        std::string sub = in.substr(i, 16);
+        int stringIndex {0};
+        for (int i {0}; i < 4; ++i)
         {
-            case aes128:
+            for (int j {0}; j < 4; ++j)
             {
-                AES128 aes;
-                temp = aes.cipher(in, key);
-                res += temp;
+                s[j][i] = sub[stringIndex++];
             }
-            break;
-            case aes256:break;
         }
-
+        out.push_back(s);
     }
-    return res;
-}
-
-stringVector cvtToBlocks(std::string& plainIn)
-{
-    std::vector<std::string> out;
-
-    if (plainIn.size() <= 16)
-    {
-        plainIn = padBlock(plainIn);
-        out.push_back(plainIn);
-        return out;
-    }
-    /*
-     * If the plaintext in is less than or equal to 16 characters,
-     * pad it then add to the out vector, which is then returned.
-     * It can be returned as there is no need for multiple blocks.
-     */
-
-    size_t numLoops = plainIn.size() / 16;
-    if (0 != plainIn.size() % 16) ++numLoops;
-    for (int i {0}; i < numLoops; ++i)
-    {
-        std::string sub = plainIn.substr(i*16, 16);
-        /*
-         * Generating a substring from the original.
-         * i*16 gets the value to start value, which is every
-         * 16th value of the original string.
-         */
-        if (sub.size() == 16) out.push_back(sub);
-        else
-        {
-            sub = padBlock(sub);
-            out.push_back(sub);
-        }
-    }
-
     return out;
 }
 
-std::string encrypt(std::string& plainIn, std::string& keyIn, EncryptionType encryptionType)
+std::string padString(std::string in)
 {
-    std::string out;
-    stringVector blocks {cvtToBlocks(plainIn)};
-    /*
-     * This function is intended to take raw user input, then
-     * handle the entire encryption process
-     */
-    if (plainIn.empty())
+    size_t inSize {in.size()};
+
+    if (inSize < 16)
     {
-        std::cout << "Nothing to encrpyt, string empty" << std::endl;
-        return "";
-        // TODO: make this throw an actual exception
+        for (int i {0}; i < (16 - inSize); ++i) in += '0';
     }
-    std::string iv {"aaaaaaaaaaaaaaaa"};
-    std::string key {padBlock(keyIn)};
-    // Must pad the key in case it's < 16 chars
-
-    out = CBC(blocks, key, iv, encryptionType);
-    // TODO: add functionality to use a randomized initialization vector
-    // ^ this will have to be stored alongside the password
-
-    return out;
-}
-
-std::string padBlock(std::string& plainIn)
-{
-    int remainder = static_cast<int>(plainIn.size() % 16);
-
-    if (remainder == 0) return plainIn;
-
-    std::string out;
-    out = plainIn;
-
-    int diff = 16 - out.size();
-
-    for (int i {0}; i < diff; ++i) out += '0';
-
-    return out;
+    else
+    {
+        for (int i {0}; i < inSize % 16; ++i) in += '0';
+    }
+    return in;
 }

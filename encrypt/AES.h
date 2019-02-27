@@ -26,10 +26,6 @@ protected:
     void invShiftRow();
     void invMixColumn();
 
-    // Helper functions
-    std::string cvtStateToStr();
-    void cvtStrToState(std::string plain);
-
     // Pure virtual functions
     virtual void addRoundKey(std::array<u_char, 176>& key, int round) = 0;
     virtual void finalRound(int round) = 0;
@@ -40,8 +36,8 @@ protected:
 
 public:
     // Main encryption and decryption functions
-    virtual std::string cipher(std::string plainText, std::string keyIn) = 0;
-    virtual std::string invCipher(std::string plainText, std::string keyIn) = 0;
+    virtual State cipher(State state, std::array<u_char, 176> keyIn) = 0;
+    virtual State invCipher(State state, std::array<u_char, 176> keyIn) = 0;
 
 };
 
