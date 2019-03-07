@@ -17,6 +17,7 @@ typedef enum EncryptionType
 } EncryptionType;
 
 std::string CBC(std::string in, std::string key);
+std::string cvtStateToStr(State in);
 std::vector<State> cvtStrToStates(std::string in);
 std::string padString(std::string in);
 

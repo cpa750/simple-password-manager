@@ -4,6 +4,16 @@ std::string CBC(std::string in, std::string key, std::string initializationVecto
 {
     std::string plainText = padString(in);
     std::vector<State> states = cvtStrToStates(in);
+    std::string out {""};
+    State toXor;
+
+    std::array<u_char, 176> keyIn;
+    for (int i {0}; i < 176; ++i)
+    {
+        keyIn[i] = static_cast<u_char>(key[i]);
+    }
+
+    AES128 aes;
 
     // TODO: Write the rest of the CBC algorithm
     for (int i {0}; i < states.size(); ++i)
@@ -15,12 +25,24 @@ std::string CBC(std::string in, std::string key, std::string initializationVecto
             {
                 for (int k {0}; k < 4; ++k)
                 {
-                    states[i][k][j] = static_cast<u_char>(initializationVector[index++]);
+                    states[i][k][j] ^= static_cast<u_char>(initializationVector[index++]);
+                    // Need to xor each element in the state with the initialization vector
                 }
             }
+            toXor = aes.cipher(states[i], keyIn);
+            out += cvtStateToStr(toXor);
+        }
+        else
+        {
+            for (int j {0}; j < 4; ++j)
+            {
+                for (int k {0}; k < 4; ++k)
+                    states[i][k][j] ^= toXor[k][j];
+            }
+            toXor = aes.cipher(states[i], keyIn);
+            out += cvtStateToStr(toXor);
         }
     }
-
 }
 
 std::vector<State> cvtStrToStates(std::string in)
@@ -31,11 +53,11 @@ std::vector<State> cvtStrToStates(std::string in)
         State s;
         std::string sub = in.substr(i, 16);
         int stringIndex {0};
-        for (int i {0}; i < 4; ++i)
+        for (int j {0}; j < 4; ++j)
         {
-            for (int j {0}; j < 4; ++j)
+            for (int k {0}; k < 4; ++k)
             {
-                s[j][i] = static_cast<u_char>(sub[stringIndex++]);
+                s[k][j] = static_cast<u_char>(sub[stringIndex++]);
             }
         }
         out.push_back(s);
@@ -49,11 +71,22 @@ std::string padString(std::string in)
 
     if (inSize < 16)
     {
-        for (int i {0}; i < (16 - inSize); ++i) in += '0';
+        for (int i {0}; i < (16 - inSize); ++i) in += static_cast<char>(0x00);
     }
     else
     {
-        for (int i {0}; i < inSize % 16; ++i) in += '0';
+        for (int i {0}; i < inSize % 16; ++i) in += static_cast<char>(0x00);
     }
     return in;
+}
+
+std::string cvtStateToStr(State in)
+{
+    std::string out;
+    for (int i {0}; i < 4; ++i)
+    {
+        for (int j {0}; j < 4; ++j)
+            out.push_back(static_cast<char>(in[j][i]));
+    }
+    return out;
 }

@@ -1,14 +1,5 @@
 #include "Decrypt.h"
 
-std::string decrypt(std::string& plainIn, std::string& key, EncryptionType encryptionType)
-{
-    stringVector blocks {cvtToBlocks(plainIn)};
-    key = padBlock(key);
-    std::string iV {"aaaaaaaaaaaaaaaa"};
-    std::string res {invCBC(blocks, key, iV, encryptionType)};
-    return res;
-}
-
 std::string invCBC(stringVector& blocks, std::string& key,
                    std::string& initializationVector, EncryptionType encryptionType)
 {
