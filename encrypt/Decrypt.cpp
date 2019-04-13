@@ -1,6 +1,21 @@
 #include "Decrypt.h"
 
-std::string invCBC(stringVector& blocks, std::string& key,
+State cvtStringToState(std::string in)
+{
+    State out;
+    int row {0};
+    int col{0};
+    for (int i{0}; i < 16; ++i)
+    {
+        out[row++][col] = static_cast<u_char>(in[i]);
+        if ((i+1) % 4 == 0) ++col;
+    }
+    return out;
+}
+
+
+// TODO: change the parameters so invCBC and CBC take the same types
+std::string invCBC(std::string in, std::string& key,
                    std::string& initializationVector, EncryptionType encryptionType)
 {
     /*
@@ -14,23 +29,39 @@ std::string invCBC(stringVector& blocks, std::string& key,
     unsigned char temp[16];
     unsigned char toXor[16];
 
-    int iters {0};
-    for (std::string block: blocks)
+    std::vector<State> states = cvtStrToStates(in);
+
+    std::array<u_char, 176> keyIn;
+    for (int i{0}; i < key.size(); ++i)
     {
-        for (int a {0}; a < block.size(); ++a)
+        keyIn[i] = static_cast<u_char>(key[i]);
+    }
+
+    int iters {0};
+
+    for (int i{0}; i < states.size(); ++i)
+    {
+        if (iters > 0)
         {
-            toXor[a] = static_cast<unsigned char>(block[a]);
+            for (int a{0}; a < states.size(); ++a)
+            {
+                toXor[a] = static_cast<unsigned char>(states[a]);
+            }
         }
-        std::string out;
+    }
+        State out;
         switch (encryptionType)
         {
             case aes128:
             {
                 AES128 aes;
-                out = aes.invCipher(block, key);
+                out = aes.invCipher(cvtStringToState(block), keyIn);
                 for (int j {0}; j < 16; ++j)
                 {
-                    temp[j] = static_cast<unsigned char>(out[j]);
+                    int row{0};
+                    int col{0};
+                    temp[j] = static_cast<unsigned char>(out[row++][col]);
+                    if ((j+1) % 4 == 0) ++col;
                 }
             }
             break;
@@ -47,7 +78,7 @@ std::string invCBC(stringVector& blocks, std::string& key,
             {
                 temp[k] ^= toXor[k];
             }
-            res += temp[k];
+            res += static_cast<char>(temp[k]);
         }
         ++iters;
     }

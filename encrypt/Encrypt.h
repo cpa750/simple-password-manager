@@ -16,9 +16,11 @@ typedef enum EncryptionType
 
 } EncryptionType;
 
-std::string CBC(std::string in, std::string key);
+std::string CBC(std::string in, std::string key, std::string initializationVector);
 std::string cvtStateToStr(State in);
 std::vector<State> cvtStrToStates(std::string in);
 std::string padString(std::string in);
+
+std::string CBC(State stateIn, std::array<u_char, 176> keyIn, std::array<u_char, 16> initializationVector);
 
 #endif //SIMPLE_PASSWORD_MANAGER_ENCRYPT_H

@@ -90,3 +90,52 @@ std::string cvtStateToStr(State in)
     }
     return out;
 }
+
+std::string CBC(State stateIn, std::array<u_char, 176> keyIn, std::array<u_char, 16> initializationVector)
+{
+    /*
+     * This CBC function is to test that the algorithm works properly with
+     * the test vectors
+     */
+    State toXor;
+    std::string out;
+    std::vector<State> states {stateIn};
+
+    AES128 aes;
+    for (int i {0}; i < states.size(); ++i)
+    {
+        if (i == 1)
+        {
+            int index {0};
+            for (int j {0}; j < 4; ++j)
+            {
+                for (int k {0}; k < 4; ++k)
+                {
+                    states[i][k][j] ^= static_cast<u_char>(initializationVector[index++]);
+                    // Need to xor each element in the state with the initialization vector
+                }
+            }
+            toXor = aes.cipher(states[i], keyIn);
+            out += cvtStateToStr(toXor);
+        }
+        else
+        {
+            for (int j {0}; j < 4; ++j)
+            {
+                for (int k {0}; k < 4; ++k)
+                    states[i][k][j] ^= toXor[k][j];
+            }
+            toXor = aes.cipher(states[i], keyIn);
+            out += cvtStateToStr(toXor);
+        }
+    }
+    for (int i{0}; i < 4; ++i)
+    {
+        for (int j{0}; j < 4; ++j)
+        {
+            std::cout << states[1][i][j];
+            if (j == 3) std::cout << '\n';
+        }
+    }
+    return out;
+}

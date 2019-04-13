@@ -3,7 +3,8 @@
 
 #include "Encrypt.h"
 
-std::string invCBC(stringVector& blocks, std::string& key,
+State convertStringToState(std::string in);
+std::string invCBC(std::string in, std::string& key,
                    std::string& initializationVector, EncryptionType encryptionType);
 
 #endif //SIMPLE_PASSWORD_MANAGER_DECRYPT_H
