@@ -14,7 +14,7 @@
 class KeySchedule
 {
 protected:
-    unsigned char rcon(u_char in);
+    u_char rcon(u_char in);
     void rotate(std::array<u_char, 4>& in);
     void scheduleCore(std::array<u_char, 4>& in, u_char i);
 

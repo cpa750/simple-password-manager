@@ -10,5 +10,4 @@ add_executable (Simple-password-manager main.cpp
                 encrypt/AES128.cpp encrypt/AES128.h
                 encrypt/KeySchedule.cpp encrypt/KeySchedule.h
                 encrypt/KeySchedule128.cpp encrypt/KeySchedule128.h
-                encrypt/typedefs.h encrypt/Encrypt.h encrypt/Encrypt.cpp
-                encrypt/Decrypt.cpp encrypt/Decrypt.h)
+                encrypt/typedefs.h)

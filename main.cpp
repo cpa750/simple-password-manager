@@ -1,35 +1,11 @@
 #include <iostream>
 #include <string>
 
-#include "encrypt/Decrypt.h"
-#include "encrypt/Encrypt.h"
+#include  "encrypt/AES128.h"
 
 int main()
 {
     AES128 aes;
-
-    State inv_a
-            {
-                    0x39, 0x02, 0xdc, 0x19,
-                    0x25, 0xdc, 0x11, 0x6a,
-                    0x84, 0x09, 0x85, 0x0b,
-                    0x1d, 0xfb, 0x97, 0x32
-            };
-
-    State a
-            {
-                    0x32, 0x88, 0x31, 0xe0,
-                    0x43, 0x5a, 0x31, 0x37,
-                    0xf6, 0x30, 0x98, 0x07,
-                    0xa8, 0x8d, 0xa2, 0x34
-            };
-    std::array<u_char, 176> b
-            {
-                    0x2b, 0x7e, 0x15, 0x16,
-                    0x28, 0xae, 0xd2, 0xa6,
-                    0xab, 0xf7, 0x15, 0x88,
-                    0x09, 0xcf, 0x4f, 0x3c
-            };
 
     State test_vec
             {
@@ -55,13 +31,26 @@ int main()
                     0xd8, 0x30, 0x80, 0x5a
             };
 
-    State s = aes.invCipher(inv_test_vec, test_vec_key);
+    State cipherTest = aes.cipher(test_vec, test_vec_key);
+    State invCipherTest = aes.invCipher(inv_test_vec, test_vec_key);
+
+    for (int i {0}; i < 4; ++i)
+    {
+        for (int j{0}; j < 4; ++j)
+        {
+            std::cout << std::hex << (int) cipherTest[i][j];
+            if (j == 3) std::cout << '\n';
+        }
+
+    }
+
+    std::cout << '\n';
 
     for (int i {0}; i < 4; ++i)
     {
         for (int j {0}; j < 4; ++j)
         {
-            std::cout << std::hex << (int)s[i][j];
+            std::cout << std::hex << (int)invCipherTest[i][j];
             if (j == 3) std::cout << '\n';
         }
     }
